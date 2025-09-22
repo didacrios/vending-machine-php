@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+    {{DOCKER_CONTAINER_NAME}}:
+        build:
+            context: .docker/php{{PHP_VERSION}}
+        container_name: "{{DOCKER_CONTAINER_NAME}}"
+        restart: "always"
+        ports:
+            - "{{APACHE_PORT}}:80"
+        links:
+            -  {{DOCKER_DB_CONTAINER_NAME}}
+        volumes:
+            - ./:/var/www/html:rw
+            - ./.docker/config/vhosts:/etc/apache2/sites-enabled
+            - ./logs/apache2:/var/log/apache2
+            - ./logs/xdebug:/var/log/xdebug
+            - ./.docker/config/php/php.ini:/usr/local/etc/php/php.ini
+        depends_on:
+            - {{DOCKER_DB_CONTAINER_NAME}}
+        environment:
+            XDEBUG_CONFIG: client_host={{XDEBUG_HOST}} remote_port={{XDEBUG_PORT}} remote_enable=1
+        networks:
+            default:
+                ipv4_address: 192.20.85.1
+    {{DOCKER_DB_CONTAINER_NAME}}:
+        image: mariadb:10.2
+        container_name:  {{DOCKER_DB_CONTAINER_NAME}}
+        command: --sql_mode=""
+        restart: always
+        environment:
+            - MYSQL_DATABASE={{DB_NAME}}
+            - MYSQL_ROOT_PASSWORD={{DB_ROOT_PASSWORD}}
+            - MYSQL_USER={{DB_USER}}
+            - MYSQL_PASSWORD={{DB_PASSWORD}}
+        ports:
+            - "{{DB_PORT}}:3306"
+        networks:
+            default:
+                ipv4_address: 192.20.85.2
+        volumes:
+            - ./.docker/dumps:/docker-entrypoint-initdb.d/
+networks:
+    default:
+        name: {{DOCKER_NETWORK}}
+        ipam:
+            config:
+                - subnet: {{SUBNET_IP}}
+volumes:
+    mysql_data:
+        external: false

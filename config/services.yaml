@@ -1,0 +1,10 @@
+# Main services configuration
+# This file includes all domain-specific service files
+
+imports:
+    - { resource: services/entrypoint.yaml }
+    - { resource: services/shared.yaml }
+
+# Add more domain-specific service files here as needed
+# Example:
+# - { resource: services/user.yaml }

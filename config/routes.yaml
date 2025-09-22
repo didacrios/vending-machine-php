@@ -1,0 +1,13 @@
+# Main routing configuration
+# This file includes all domain-specific route files
+
+# Entrypoint routes (Controllers)
+entrypoint_routes:
+    resource: routes/entrypoint.yaml
+    type: yaml
+
+# Add more domain-specific route files here as needed
+# Example:
+# user_routes:
+#     resource: routes/user.yaml
+#     type: yaml

@@ -1,0 +1,1 @@
+[Mon Sep 22 08:18:20.869998 2025] [php:notice] [pid 17:tid 17] [client 192.20.0.1:39796] 2025-09-22T10:18:20+02:00 [critical] Uncaught Error: Class "ArtesansDigitals\\Kernel" not found
