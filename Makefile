@@ -167,6 +167,21 @@ test-integration: ## Run integration tests
 	@echo "$(GREEN)🧪 Running integration tests...$(NC)"
 	@docker exec $(DOCKER_CONTAINER_NAME) ./vendor/bin/phpunit --testsuite=Integration
 
+# Code Quality commands
+.PHONY: phpstan
+phpstan: ## Run PHPStan static analysis
+	@echo "$(GREEN)🔍 Running PHPStan static analysis...$(NC)"
+	@docker exec $(DOCKER_CONTAINER_NAME) ./vendor/bin/phpstan analyse
+
+.PHONY: phpstan-baseline
+phpstan-baseline: ## Generate PHPStan baseline
+	@echo "$(GREEN)📊 Generating PHPStan baseline...$(NC)"
+	@docker exec $(DOCKER_CONTAINER_NAME) ./vendor/bin/phpstan analyse --generate-baseline
+
+.PHONY: quality
+quality: phpstan test ## Run all quality checks (PHPStan + Tests)
+	@echo "$(GREEN)✅ All quality checks passed!$(NC)"
+
 # Network management
 .PHONY: network-info
 network-info: ## Show Docker network information

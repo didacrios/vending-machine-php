@@ -18,3 +18,12 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+###> IDE & System ###
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
+*.cache
+###< IDE & System ###

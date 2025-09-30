@@ -104,6 +104,11 @@ This ensures that when you clone the skeleton and change the `APP_NAMESPACE` in 
 - `make test-unit` - Run unit tests
 - `make test-integration` - Run integration tests
 
+### Code Quality
+- `make phpstan` - Run PHPStan static analysis
+- `make phpstan-baseline` - Generate PHPStan baseline
+- `make quality` - Run all quality checks (PHPStan + Tests)
+
 ### Cleanup
 - `make clean` - Clean up containers and images
 - `make reset` - Reset everything (containers, images, network)
@@ -129,6 +134,9 @@ Tests follow the Given-When-Then format and use PHPUnit 12.
 
 ### Development
 - PHPUnit 12
+- PHPStan (Level 6)
+- PHPStan Symfony Extension
+- PHPStan Doctrine Extension
 - Rector
 - Symfony Web Profiler
 - Symfony Maker Bundle
@@ -172,9 +180,11 @@ After setup, you can:
    php bin/console app:hello-world Alice
    ```
 
-3. **Run tests:**
+3. **Run tests and quality checks:**
    ```bash
    make test
+   make phpstan
+   make quality  # Runs both PHPStan and tests
    ```
 
 ## 🐳 Docker

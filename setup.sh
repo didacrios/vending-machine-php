@@ -78,6 +78,7 @@ replace_placeholders() {
         -e "s|{{DB_ROOT_PASSWORD}}|${DB_ROOT_PASSWORD}|g" \
         -e "s|{{XDEBUG_HOST}}|${XDEBUG_HOST}|g" \
         -e "s|{{XDEBUG_PORT}}|${XDEBUG_PORT}|g" \
+        -e "s|{{APP_SECRET}}|${APP_SECRET}|g" \
         "$file" > "$temp_file"
 
     # Determine output filename based on template type
@@ -125,6 +126,9 @@ export DB_ROOT_PASSWORD=$(grep '^DB_ROOT_PASSWORD :=' Makefile | cut -d' ' -f3)
 export XDEBUG_HOST=$(grep '^XDEBUG_HOST :=' Makefile | cut -d' ' -f3)
 export XDEBUG_PORT=$(grep '^XDEBUG_PORT :=' Makefile | cut -d' ' -f3)
 
+# Generate a secure random APP_SECRET
+export APP_SECRET=$(openssl rand -hex 32)
+
 echo -e "${YELLOW}Configuration Summary:${NC}"
 echo "  Project Name: ${PROJECT_NAME}"
 echo "  App Namespace: ${APP_NAMESPACE}"
@@ -135,6 +139,7 @@ echo "  Alias: ${SUBNET_ALIAS}"
 echo "  Apache Port: ${APACHE_PORT}"
 echo "  Database Port: ${DB_PORT}"
 echo "  Database Name: ${DB_NAME}"
+echo "  App Secret: ${APP_SECRET:0:8}... (generated securely)"
 echo ""
 
 # Ask for confirmation
@@ -271,6 +276,23 @@ if [ -f "tests/Shared/Domain/ValueObjectTest.php.template" ]; then
     echo "  ✅ ValueObjectTest.php generated"
 fi
 
+# Process environment templates
+if [ -f ".env.template" ]; then
+    replace_placeholders ".env.template"
+    echo "  ✅ .env generated"
+fi
+
+if [ -f ".env.test.template" ]; then
+    replace_placeholders ".env.test.template"
+    echo "  ✅ .env.test generated"
+fi
+
+# Process PHPStan configuration template
+if [ -f "phpstan.neon.template" ]; then
+    replace_placeholders "phpstan.neon.template"
+    echo "  ✅ phpstan.neon generated"
+fi
+
 # Process service configuration templates
 if [ -f "config/services/entrypoint.yaml.template" ]; then
     replace_placeholders "config/services/entrypoint.yaml.template"
@@ -338,6 +360,9 @@ rm -f src/Shared/Application/Command.php.template
 rm -f src/Shared/Application/Query.php.template
 rm -f tests/Entrypoint/Http/Controllers/HelloWorldControllerTest.php.template
 rm -f tests/Shared/Domain/ValueObjectTest.php.template
+rm -f .env.template
+rm -f .env.test.template
+rm -f phpstan.neon.template
 echo -e "${GREEN}✅ Template files cleaned up${NC}"
 
 

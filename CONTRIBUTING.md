@@ -210,6 +210,7 @@ class ValueObjectTest extends TestCase
 - Keep methods **small** (10-20 lines maximum)
 - Use **meaningful names** for variables and functions
 - Add **type hints** for all parameters and return types
+- Pass **PHPStan Level 6** static analysis
 
 ### Template Code Style
 
@@ -229,20 +230,21 @@ class ValueObjectTest extends TestCase
 
 ### Before Submitting
 
-1. **Run all tests:**
+1. **Run all quality checks:**
    ```bash
-   make test
+   make quality  # Runs PHPStan + Tests
    ```
 
 2. **Verify setup works:**
    ```bash
    make reset  # Clean slate
    make setup  # Fresh setup
-   make test   # Verify everything works
+   make quality  # Verify everything works
    ```
 
 3. **Check code style:**
    - Ensure PSR-12 compliance
+   - Pass PHPStan Level 6 analysis
    - Verify all templates are processed correctly
    - Test with different project names/namespaces
 
@@ -276,6 +278,7 @@ Brief description of changes
 
 ## Checklist
 - [ ] Code follows PSR-12 standards
+- [ ] PHPStan Level 6 passes
 - [ ] Templates use correct placeholders
 - [ ] Documentation updated
 - [ ] No breaking changes
