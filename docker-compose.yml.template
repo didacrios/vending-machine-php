@@ -22,7 +22,7 @@ services:
             XDEBUG_CONFIG: client_host={{XDEBUG_HOST}} remote_port={{XDEBUG_PORT}} remote_enable=1
         networks:
             default:
-                ipv4_address: 192.20.85.1
+                ipv4_address: {{SUBNET_BASE}}.1
     {{DOCKER_DB_CONTAINER_NAME}}:
         image: mariadb:10.2
         container_name:  {{DOCKER_DB_CONTAINER_NAME}}
@@ -37,7 +37,7 @@ services:
             - "{{DB_PORT}}:3306"
         networks:
             default:
-                ipv4_address: 192.20.85.2
+                ipv4_address: {{SUBNET_BASE}}.2
         volumes:
             - ./.docker/dumps:/docker-entrypoint-initdb.d/
 networks:
