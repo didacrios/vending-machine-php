@@ -147,7 +147,7 @@ echo -e "${YELLOW}Do you want to continue with the setup? (y/N)${NC}"
 read -r response
 if [[ ! "$response" =~ ^[Yy]$ ]]; then
     echo -e "${RED}Setup cancelled by user${NC}"
-    exit 0
+    exit 1
 fi
 
 # Check for existing infrastructure and ask for confirmation
