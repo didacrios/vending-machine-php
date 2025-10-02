@@ -1,0 +1,19 @@
+# Entrypoint services configuration
+# HTTP Controllers and Console Commands
+
+services:
+    # HTTP Controllers
+    VendingMachine\Entrypoint\Http\Controllers\:
+        resource: '../../src/Entrypoint/Http/Controllers/'
+        tags: ['controller.service_arguments']
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    # Console Commands
+    VendingMachine\Entrypoint\Console\Commands\:
+        resource: '../../src/Entrypoint/Console/Commands/'
+        tags: ['console.command']
+        public: false
+        autowire: true
+        autoconfigure: true

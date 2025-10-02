@@ -1,0 +1,24 @@
+# Shared services configuration
+# Domain, Application, and Infrastructure layers
+
+services:
+    # Domain layer
+    VendingMachine\Shared\Domain\:
+        resource: '../../src/Shared/Domain/'
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    # Application layer
+    VendingMachine\Shared\Application\:
+        resource: '../../src/Shared/Application/'
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    # Infrastructure layer
+    VendingMachine\Shared\Infrastructure\:
+        resource: '../../src/Shared/Infrastructure/'
+        public: false
+        autowire: true
+        autoconfigure: true

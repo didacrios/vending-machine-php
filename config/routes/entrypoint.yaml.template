@@ -1,8 +1,0 @@
-# Entrypoint routes configuration
-# HTTP Controllers routes
-
-controllers:
-    resource:
-        path: ../../src/Entrypoint/Http/Controllers/
-        namespace: {{APP_NAMESPACE}}\Entrypoint\Http\Controllers
-    type: attribute

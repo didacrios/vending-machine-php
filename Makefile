@@ -2,21 +2,21 @@
 # =====================================
 
 # Project Configuration
-PROJECT_NAME := artesansdigitals
-APP_NAMESPACE := ArtesansDigitals
+PROJECT_NAME := vendingmachine
+APP_NAMESPACE := VendingMachine
 PHP_VERSION := 8.4
 
 # Docker Configuration
 DOCKER_CONTAINER_NAME := $(PROJECT_NAME)_web
 DOCKER_DB_CONTAINER_NAME := $(PROJECT_NAME)_db
 DOCKER_NETWORK := $(PROJECT_NAME)_network
-SUBNET_IP := 192.20.85.0/16
-SUBNET_BASE := 192.20.85
+SUBNET_IP := 192.19.85.0/16
+SUBNET_BASE := 192.19.85
 SUBNET_ALIAS := $(PROJECT_NAME).local
 
 # Port Configuration
-APACHE_PORT := 8089
-DB_PORT := 13307
+APACHE_PORT := 8085
+DB_PORT := 13309
 
 # Database Configuration
 DB_NAME := $(PROJECT_NAME)
@@ -25,7 +25,7 @@ DB_PASSWORD := $(PROJECT_NAME)
 DB_ROOT_PASSWORD := root_password
 
 # Development Configuration
-XDEBUG_HOST := $(SUBNET_BASE).1
+XDEBUG_HOST := 192.19.85.1
 XDEBUG_PORT := 9000
 
 # Colors for output
@@ -47,7 +47,13 @@ setup: ## Run the complete setup process
 	@echo "$(GREEN)🚀 Starting LAMP Skeleton Setup...$(NC)"
 	@echo ""
 	@$(MAKE) check-dependencies
-	@./setup.sh && $(MAKE) setup-hosts || (echo "$(RED)❌ Setup cancelled or failed. Skipping hosts configuration.$(NC)" && exit 1)
+	@./setup.sh || (echo "$(RED)❌ Setup cancelled or failed.$(NC)" && exit 1)
+	@if [ "$$SETUP_HOSTS" = "true" ]; then \
+		$(MAKE) setup-hosts; \
+	else \
+		echo "$(YELLOW)⚠️  Hosts configuration skipped$(NC)"; \
+	fi
+
 
 
 # Dependency checks
@@ -245,3 +251,57 @@ reset: ## Reset everything (containers, images, network)
 	@$(MAKE) clean
 	@docker network rm $(DOCKER_NETWORK) 2>/dev/null || true
 	@echo "$(GREEN)✅ Reset completed$(NC)"
+
+# Symfony commands
+.PHONY: cache-clear
+cache-clear: ## Clear Symfony cache
+	@echo "$(GREEN)🧹 Clearing Symfony cache...$(NC)"
+	@docker exec $(DOCKER_CONTAINER_NAME) php bin/console cache:clear
+	@echo "$(GREEN)✅ Cache cleared$(NC)"
+
+.PHONY: cache-warmup
+cache-warmup: ## Warm up Symfony cache
+	@echo "$(GREEN)🔥 Warming up Symfony cache...$(NC)"
+	@docker exec $(DOCKER_CONTAINER_NAME) php bin/console cache:warmup
+	@echo "$(GREEN)✅ Cache warmed up$(NC)"
+
+.PHONY: dump-env
+dump-env: ## Process .env files and generate .env.local.php
+	@echo "$(GREEN)📦 Processing .env files...$(NC)"
+	@docker exec $(DOCKER_CONTAINER_NAME) composer dump-env dev
+	@echo "$(GREEN)✅ Environment files processed$(NC)"
+
+.PHONY: routes
+routes: ## List all available routes
+	@echo "$(GREEN)🛣️  Available routes:$(NC)"
+	@docker exec $(DOCKER_CONTAINER_NAME) php bin/console debug:router
+
+.PHONY: config-validate
+config-validate: ## Validate Symfony configuration
+	@echo "$(GREEN)✅ Validating Symfony configuration...$(NC)"
+	@docker exec $(DOCKER_CONTAINER_NAME) php bin/console config:validate
+	@echo "$(GREEN)✅ Configuration is valid$(NC)"
+
+.PHONY: secrets-generate
+secrets-generate: ## Generate encryption keys for secrets
+	@echo "$(GREEN)🔐 Generating encryption keys...$(NC)"
+	@docker exec $(DOCKER_CONTAINER_NAME) php bin/console secrets:generate-keys
+	@echo "$(GREEN)✅ Encryption keys generated$(NC)"
+
+.PHONY: doctrine-migrations-diff
+doctrine-migrations-diff: ## Generate new migration from entity changes
+	@echo "$(GREEN)📝 Generating new migration...$(NC)"
+	@docker exec $(DOCKER_CONTAINER_NAME) php bin/console doctrine:migrations:diff
+	@echo "$(GREEN)✅ Migration generated$(NC)"
+
+.PHONY: doctrine-migrations-migrate
+doctrine-migrations-migrate: ## Execute pending migrations
+	@echo "$(GREEN)🚀 Executing migrations...$(NC)"
+	@docker exec $(DOCKER_CONTAINER_NAME) php bin/console doctrine:migrations:migrate --no-interaction
+	@echo "$(GREEN)✅ Migrations executed$(NC)"
+
+.PHONY: symfony-status
+symfony-status: ## Show Symfony application status
+	@echo "$(GREEN)📊 Symfony application status:$(NC)"
+	@docker exec $(DOCKER_CONTAINER_NAME) php bin/console about
+

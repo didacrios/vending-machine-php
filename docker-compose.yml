@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+    vendingmachine_web:
+        build:
+            context: .docker/php8.4
+        container_name: "vendingmachine_web"
+        restart: "always"
+        ports:
+            - "8085:80"
+        links:
+            -  vendingmachine_db
+        volumes:
+            - ./:/var/www/html:rw
+            - ./.docker/config/vhosts:/etc/apache2/sites-enabled
+            - ./logs/apache2:/var/log/apache2
+            - ./logs/xdebug:/var/log/xdebug
+            - ./.docker/config/php/php.ini:/usr/local/etc/php/php.ini
+        depends_on:
+            - vendingmachine_db
+        environment:
+            XDEBUG_CONFIG: client_host=192.19.85.1 remote_port=9000 remote_enable=1
+        networks:
+            default:
+                ipv4_address: 192.19.85.1
+    vendingmachine_db:
+        image: mariadb:10.2
+        container_name:  vendingmachine_db
+        command: --sql_mode=""
+        restart: always
+        environment:
+            - MYSQL_DATABASE=vendingmachine
+            - MYSQL_ROOT_PASSWORD=root_password
+            - MYSQL_USER=vendingmachine
+            - MYSQL_PASSWORD=vendingmachine
+        ports:
+            - "13309:3306"
+        networks:
+            default:
+                ipv4_address: 192.19.85.2
+        volumes:
+            - ./.docker/dumps:/docker-entrypoint-initdb.d/
+networks:
+    default:
+        name: vendingmachine_network
+        ipam:
+            config:
+                - subnet: 192.19.85.0/16
+volumes:
+    mysql_data:
+        external: false
