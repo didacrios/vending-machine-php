@@ -1,6 +1,23 @@
-# LAMP Skeleton
+# Vending Machine - Technical Challenge
 
-A reusable LAMP (Linux - Apache - MySQL/MariaDB - PHP) skeleton for Symfony 7.3.3 projects with Docker and Docker Compose, following DDD + Hexagonal Architecture principles.
+A vending machine simulation built with Symfony 7.3.3, following DDD + Hexagonal Architecture principles. This project implements a vending machine that accepts coins, dispenses items, and handles change.
+
+## 🎯 Project Requirements
+
+The vending machine requirements have been refined and converted into user stories for iterative development:
+
+### 📋 User Stories
+
+- **[USER_STORY_001.md](USER_STORY_001.md)** - As a customer, I want to insert money and purchase items, so that I can get the products I need
+- **[USER_STORY_002.md](USER_STORY_002.md)** - As a customer, I want to receive change when I overpay for an item, so that I don't lose money
+- **[USER_STORY_003.md](USER_STORY_003.md)** - As a customer, I want to return my inserted money if I change my mind, so that I can get my money back
+- **[USER_STORY_004.md](USER_STORY_004.md)** - As a service person, I want to restock items and change in the machine, so that customers can continue to use the vending machine
+
+Each user story includes acceptance tests in Gherkin format to guide development.
+
+## 🏗️ Technical Foundation
+
+This project is built on a LAMP (Linux - Apache - MySQL/MariaDB - PHP) skeleton for Symfony 7.3.3 projects with Docker and Docker Compose, following DDD + Hexagonal Architecture principles.
 
 ## 🚀 Quick Start
 
@@ -34,6 +51,8 @@ A reusable LAMP (Linux - Apache - MySQL/MariaDB - PHP) skeleton for Symfony 7.3.
    - Web: http://localhost:8089
    - Database: localhost:13307
 
+Or the possible domain alias and ports configured in the Makefile.
+
 ## 📁 Project Structure
 
 ```
@@ -65,16 +84,7 @@ The project uses a `Makefile` with configurable variables:
 
 ## 🔧 Template System
 
-The skeleton uses a template system that automatically generates personalized files based on your configuration:
-
-### Template Files
-- `*.template` - Core configuration templates
-- `*.template.php` - PHP source code templates
-- `*.template.yaml` - YAML configuration templates
-- `*.template.xml` - XML configuration templates
-
-### Generated Files
-When you run `make setup`, the following files are automatically generated with your namespace:
+The skeleton uses a template system that automatically generates personalized files based on your configuration. When you run `make setup`, the following files are automatically generated with your namespace:
 - `bin/console` - Symfony console entry point
 - `public/index.php` - Web entry point
 - `src/Kernel.php` - Application kernel
@@ -159,7 +169,7 @@ This skeleton follows **Domain-Driven Design (DDD)** and **Hexagonal Architectur
 ## 🔧 Customization
 
 1. **Change project name**: Edit `PROJECT_NAME` in `Makefile`
-2. **Add new domains**: Create directories under `src/` following the pattern
+2. **Add new aggregates**: Create directories under `src/` following the pattern
 3. **Add new routes**: Create YAML files in `config/routes/`
 4. **Add new services**: Create YAML files in `config/services/`
 
