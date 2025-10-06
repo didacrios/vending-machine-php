@@ -177,7 +177,7 @@ test-integration: ## Run integration tests
 test-with-coverage: ## Run tests with coverage report (requires Xdebug)
 	@echo "$(GREEN)🧪 Running tests with coverage...$(NC)"
 	@echo "$(YELLOW)⚠️  Note: Coverage requires Xdebug extension$(NC)"
-	@docker exec $(DOCKER_CONTAINER_NAME) ./vendor/bin/phpunit --coverage-text || echo "$(RED)❌ Coverage not available. Install Xdebug extension.$(NC)"
+	@docker exec $(DOCKER_CONTAINER_NAME) ./vendor/bin/phpunit --coverage-text
 
 # Code Quality commands
 .PHONY: phpstan
