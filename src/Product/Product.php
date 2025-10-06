@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace VendingMachine\Product;
 
+use VendingMachine\Shared\Domain\Money;
+
 final class Product
 {
     public const WATER = 'WATER';
@@ -29,9 +31,9 @@ final class Product
         return $this->name;
     }
 
-    public function price(): float
+    public function price(): Money
     {
-        return self::PRICES[$this->name];
+        return Money::fromFloat(self::PRICES[$this->name]);
     }
 }
 

@@ -7,10 +7,13 @@ namespace VendingMachine\Tests\Product;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use VendingMachine\Product\Product;
+use VendingMachine\Shared\Domain\Money;
 
 #[CoversClass(Product::class)]
+#[UsesClass(Money::class)]
 final class ProductTest extends TestCase
 {
     #[DataProvider('validProductsProvider')]
@@ -21,7 +24,7 @@ final class ProductTest extends TestCase
 
         // Then
         $this->assertEquals($expectedName, $product->name());
-        $this->assertEquals($expectedPrice, $product->price());
+        $this->assertEquals($expectedPrice, $product->price()->toFloat());
     }
 
     public static function validProductsProvider(): array
