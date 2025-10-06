@@ -19,7 +19,7 @@ services:
         depends_on:
             - vendingmachine_db
         environment:
-            XDEBUG_CONFIG: client_host=192.19.85.1 remote_port=9000 remote_enable=1
+            XDEBUG_CONFIG: client_host=192.19.85.1 client_port=9000 mode=debug,coverage
         networks:
             default:
                 ipv4_address: 192.19.85.1
