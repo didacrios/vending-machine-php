@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Repository implementation
+    VendingMachine\VendingMachine\Infrastructure\Repository\DoctrineVendingMachineRepository:
+        class: VendingMachine\VendingMachine\Infrastructure\Repository\DoctrineVendingMachineRepository
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+
+    # Repository interface alias
+    VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface:
+        alias: VendingMachine\VendingMachine\Infrastructure\Repository\DoctrineVendingMachineRepository

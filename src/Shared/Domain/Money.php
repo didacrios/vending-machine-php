@@ -6,8 +6,6 @@ namespace VendingMachine\Shared\Domain;
 
 final class Money implements \Stringable
 {
-    private const PRECISION = 2; // 2 decimal places for cents
-
     public function __construct(
         private readonly int $cents
     ) {

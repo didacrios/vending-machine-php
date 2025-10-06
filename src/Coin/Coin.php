@@ -14,7 +14,7 @@ final class Coin
         private readonly Money $value
     ) {
         $valueAsFloat = $value->toFloat();
-        if (!in_array($valueAsFloat, self::VALID_VALUES, true)) {
+        if (!in_array($valueAsFloat, self::VALID_VALUES)) {
             throw new \InvalidArgumentException('Invalid coin value');
         }
     }

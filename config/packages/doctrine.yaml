@@ -6,6 +6,11 @@ doctrine:
         # either here or in the DATABASE_URL env var (see .env file)
         #server_version: '15'
 
+        # Register custom Doctrine types
+        types:
+            coin_array: VendingMachine\VendingMachine\Infrastructure\Doctrine\Type\CoinArrayType
+            money: VendingMachine\VendingMachine\Infrastructure\Doctrine\Type\MoneyType
+
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
@@ -13,6 +18,6 @@ doctrine:
         mappings:
             VendingMachine:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'VendingMachine\Entity'
+                dir: '%kernel.project_dir%/src/VendingMachine/Domain'
+                prefix: 'VendingMachine\VendingMachine\Domain'
                 alias: VendingMachine

@@ -19,7 +19,7 @@
             <directory>tests/Coin</directory>
             <directory>tests/Product</directory>
             <directory>tests/Shared</directory>
-            <directory>tests/VendingMachine</directory>
+            <directory>tests/VendingMachine/Application</directory>
         </testsuite>
         <testsuite name="Integration">
             <directory>tests/Entrypoint</directory>

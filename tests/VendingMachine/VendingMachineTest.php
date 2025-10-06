@@ -12,7 +12,7 @@ use VendingMachine\Product\Product;
 use VendingMachine\Shared\Domain\Money;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientFundsException;
 use VendingMachine\VendingMachine\Domain\Exception\ProductOutOfStockException;
-use VendingMachine\VendingMachine\VendingMachine;
+use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
 
 #[CoversClass(VendingMachine::class)]
 #[UsesClass(Coin::class)]

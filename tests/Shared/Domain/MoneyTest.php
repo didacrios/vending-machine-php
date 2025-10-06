@@ -20,7 +20,7 @@ final class MoneyTest extends TestCase
         $money = Money::fromFloat($amount);
 
         // Then
-        $this->assertEquals($expectedValue, $money->toFloat(), '', 0.001); // Allow small floating point differences
+        $this->assertEqualsWithDelta($expectedValue, $money->toFloat(), 0.001); // Allow small floating point differences
     }
 
     public static function validAmountsProvider(): array

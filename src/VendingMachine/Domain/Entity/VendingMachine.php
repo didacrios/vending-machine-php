@@ -2,18 +2,32 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\VendingMachine;
+namespace VendingMachine\VendingMachine\Domain\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use VendingMachine\Coin\Coin;
 use VendingMachine\Shared\Domain\Money;
 use VendingMachine\Product\Product;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientFundsException;
 use VendingMachine\VendingMachine\Domain\Exception\ProductOutOfStockException;
 
+#[ORM\Entity]
+#[ORM\Table(name: 'vending_machine')]
 final class VendingMachine
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
+
+
+    #[ORM\Column(type: 'coin_array')]
     private array $insertedCoins = [];
+
+    #[ORM\Column(type: 'json')]
     private array $availableProducts = [];
+
+    #[ORM\Column(type: 'json')]
     private array $availableChange = [];
 
     public function __construct()
@@ -21,6 +35,12 @@ final class VendingMachine
         $this->initializeProducts();
         $this->initializeChange();
     }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
 
     public function insertCoin(Coin $coin): void
     {
@@ -62,6 +82,16 @@ final class VendingMachine
         return $coins;
     }
 
+    public function getAvailableProducts(): array
+    {
+        return $this->availableProducts;
+    }
+
+    public function getAvailableChange(): array
+    {
+        return $this->availableChange;
+    }
+
     private function initializeProducts(): void
     {
         $this->availableProducts = [
@@ -74,10 +104,10 @@ final class VendingMachine
     private function initializeChange(): void
     {
         $this->availableChange = [
-            0.05 => 10,
-            0.10 => 10,
-            0.25 => 10,
-            1.00 => 5,
+            5 => 10,    // 5 cents
+            10 => 10,   // 10 cents
+            25 => 10,   // 25 cents
+            100 => 5,   // 100 cents (1 euro)
         ];
     }
 
