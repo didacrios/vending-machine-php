@@ -18,7 +18,7 @@ use VendingMachine\VendingMachine\Domain\Exception\InsufficientFundsException;
 use VendingMachine\VendingMachine\Domain\Exception\ProductOutOfStockException;
 
 #[AsCommand(
-    name: 'vending-machine:get-product',
+    name: 'vending-machine:purchase-product',
     description: 'Purchase a product from the vending machine'
 )]
 final class PurchaseProductConsoleCommand extends Command
