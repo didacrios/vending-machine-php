@@ -2,6 +2,53 @@
 
 A vending machine simulation built with PHP 8.4 and Symfony 7.3.3, following Domain-Driven Design (DDD) and Hexagonal Architecture principles. This project implements a functional vending machine that handles coin insertion, product purchases, change calculation, and inventory management.
 
+## 🚀 Quick Start
+
+### Prerequisites
+- Docker
+- Docker Compose
+- Make
+
+### Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/didacrios/vending-machine-php.git
+   cd vending-machine-php
+   ```
+
+2. **Configure (optional):**
+
+   If you need to change ports or other settings, edit the `Makefile`:
+   ```makefile
+   APACHE_PORT := 8085    # Web access port
+   DB_PORT := 13309       # Database port
+   ```
+
+   Or edit `docker-compose.yml` directly for more control.
+
+3. **Run setup:**
+   ```bash
+   make setup
+   ```
+
+   This will:
+   - Build and start Docker containers
+   - Install all dependencies
+   - Configure the application
+
+4. **Run database migrations:**
+   ```bash
+   make doctrine-migrations-migrate
+   ```
+
+   This will create the necessary database structure.
+
+5. **Verify installation:**
+   ```bash
+   make test
+   ```
+
 ## 🎯 User Stories
 
 The vending machine requirements have been broken down into user stories for iterative development:
@@ -89,46 +136,6 @@ This project was developed following **Test-Driven Development (TDD)** principle
 - **Commit history as documentation**: All design decisions and thought processes are reflected in the commit messages
 
 The git history provides a complete narrative of the development process.
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Docker
-- Docker Compose
-- Make
-
-### Setup
-
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url> vending-machine
-   cd vending-machine
-   ```
-
-2. **Configure (optional):**
-
-   If you need to change ports or other settings, edit the `Makefile`:
-   ```makefile
-   APACHE_PORT := 8085    # Web access port
-   DB_PORT := 13309       # Database port
-   ```
-
-   Or edit `docker-compose.yml` directly for more control.
-
-3. **Run setup:**
-   ```bash
-   make setup
-   ```
-
-   This will:
-   - Build and start Docker containers
-   - Install all dependencies
-   - Configure the application
-
-4. **Verify installation:**
-   ```bash
-   make test
-   ```
 
 ## 💻 Using the Application
 
