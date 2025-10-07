@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use VendingMachine\Shared\Domain\Money;
+use VendingMachine\VendingMachine\Domain\Service\ChangeCalculator;
 use VendingMachine\VendingMachine\Domain\Service\PurchaseProcessor;
 use VendingMachine\VendingMachine\Domain\Service\PurchaseResponse;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
@@ -18,6 +19,7 @@ use VendingMachine\VendingMachine\Domain\Exception\ProductOutOfStockException;
 
 #[CoversClass(PurchaseProcessor::class)]
 #[UsesClass(PurchaseResponse::class)]
+#[UsesClass(ChangeCalculator::class)]
 #[UsesClass(Coin::class)]
 #[UsesClass(Product::class)]
 #[UsesClass(Money::class)]
@@ -30,7 +32,8 @@ final class PurchaseProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->purchaseProcessor = new PurchaseProcessor();
+        $changeCalculator = new ChangeCalculator();
+        $this->purchaseProcessor = new PurchaseProcessor($changeCalculator);
     }
 
     public function testShouldReturnPurchaseResponseWithoutChangeWhenExactAmountIsInserted(): void

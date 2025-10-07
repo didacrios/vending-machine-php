@@ -14,8 +14,13 @@ services:
         alias: VendingMachine\VendingMachine\Infrastructure\Repository\DoctrineVendingMachineRepository
 
     # Domain Services
+    VendingMachine\VendingMachine\Domain\Service\ChangeCalculator:
+        class: VendingMachine\VendingMachine\Domain\Service\ChangeCalculator
+
     VendingMachine\VendingMachine\Domain\Service\PurchaseProcessor:
         class: VendingMachine\VendingMachine\Domain\Service\PurchaseProcessor
+        arguments:
+            $changeCalculator: '@VendingMachine\VendingMachine\Domain\Service\ChangeCalculator'
 
     # Command Handlers
     VendingMachine\VendingMachine\Application\Command\InsertCoinHandler:

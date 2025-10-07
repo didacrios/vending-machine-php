@@ -7,13 +7,13 @@ namespace VendingMachine\Tests\VendingMachine\Application\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 use VendingMachine\Shared\Domain\Money;
+use VendingMachine\Tests\VendingMachine\Domain\Entity\VendingMachineObjectMother;
 use VendingMachine\VendingMachine\Application\Command\InsertCoinCommand;
 use VendingMachine\VendingMachine\Application\Command\InsertCoinHandler;
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
 use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
-use VendingMachine\Tests\VendingMachine\Domain\VendingMachineObjectMother;
+use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 
 #[CoversClass(InsertCoinHandler::class)]
 #[UsesClass(InsertCoinCommand::class)]

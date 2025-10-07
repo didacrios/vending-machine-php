@@ -35,6 +35,16 @@ final class Money implements \Stringable
         return $this->cents < $other->cents;
     }
 
+    public function isLessThanOrEqual(Money $other): bool
+    {
+        return $this->cents <= $other->cents;
+    }
+
+    public function subtract(Money $other): self
+    {
+        return new self($this->cents - $other->cents);
+    }
+
     public function toFloat(): float
     {
         return $this->cents / 100;

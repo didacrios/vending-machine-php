@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use VendingMachine\Shared\Domain\Money;
-use VendingMachine\Tests\VendingMachine\Domain\VendingMachineObjectMother;
+use VendingMachine\Tests\VendingMachine\Domain\Entity\VendingMachineObjectMother;
 use VendingMachine\VendingMachine\Application\Command\Purchase\PurchaseProductCommand;
 use VendingMachine\VendingMachine\Application\Command\Purchase\PurchaseProductHandler;
 use VendingMachine\VendingMachine\Application\Command\Purchase\PurchaseProductResult;
@@ -17,6 +17,7 @@ use VendingMachine\VendingMachine\Domain\Exception\InsufficientChangeException;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientFundsException;
 use VendingMachine\VendingMachine\Domain\Exception\ProductOutOfStockException;
 use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
+use VendingMachine\VendingMachine\Domain\Service\ChangeCalculator;
 use VendingMachine\VendingMachine\Domain\Service\PurchaseProcessor;
 use VendingMachine\VendingMachine\Domain\Service\PurchaseResponse;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
@@ -25,6 +26,7 @@ use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 #[CoversClass(PurchaseProductHandler::class)]
 #[UsesClass(PurchaseProductCommand::class)]
 #[UsesClass(PurchaseProductResult::class)]
+#[UsesClass(ChangeCalculator::class)]
 #[UsesClass(PurchaseProcessor::class)]
 #[UsesClass(PurchaseResponse::class)]
 #[UsesClass(Coin::class)]
@@ -42,7 +44,8 @@ final class PurchaseProductHandlerTest extends TestCase
     protected function setUp(): void
     {
         $this->repository = $this->createMock(VendingMachineRepositoryInterface::class);
-        $processor = new PurchaseProcessor();
+        $changeCalculator = new ChangeCalculator();
+        $processor = new PurchaseProcessor($changeCalculator);
         $this->handler = new PurchaseProductHandler($this->repository, $processor);
     }
 

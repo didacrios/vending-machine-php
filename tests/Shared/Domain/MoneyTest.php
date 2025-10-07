@@ -98,4 +98,30 @@ final class MoneyTest extends TestCase
         $this->assertInstanceOf(\Stringable::class, $money);
         $this->assertEquals('0.65', (string) $money);
     }
+
+    public function testItShouldCheckIfMoneyIsLessThanOrEqual(): void
+    {
+        // Given
+        $money1 = Money::fromFloat(0.25);
+        $money2 = Money::fromFloat(0.50);
+        $money3 = Money::fromFloat(0.25);
+
+        // Then
+        $this->assertTrue($money1->isLessThanOrEqual($money2));
+        $this->assertTrue($money1->isLessThanOrEqual($money3));
+        $this->assertFalse($money2->isLessThanOrEqual($money1));
+    }
+
+    public function testItShouldSubtractMoneyCorrectly(): void
+    {
+        // Given
+        $money1 = Money::fromFloat(1.00);
+        $money2 = Money::fromFloat(0.35);
+
+        // When
+        $result = $money1->subtract($money2);
+
+        // Then
+        $this->assertEquals(0.65, $result->toFloat());
+    }
 }

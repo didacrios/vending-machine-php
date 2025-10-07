@@ -2,24 +2,26 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\Tests\VendingMachine;
+namespace VendingMachine\tests\VendingMachine\Domain\Entity;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
-use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 use VendingMachine\Shared\Domain\Money;
+use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientFundsException;
 use VendingMachine\VendingMachine\Domain\Exception\ProductOutOfStockException;
-use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
+use VendingMachine\VendingMachine\Domain\Service\ChangeCalculator;
 use VendingMachine\VendingMachine\Domain\Service\PurchaseProcessor;
 use VendingMachine\VendingMachine\Domain\Service\PurchaseResponse;
+use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
+use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 
 #[CoversClass(VendingMachine::class)]
 #[UsesClass(Coin::class)]
 #[UsesClass(Product::class)]
 #[UsesClass(Money::class)]
+#[UsesClass(ChangeCalculator::class)]
 #[UsesClass(PurchaseProcessor::class)]
 #[UsesClass(PurchaseResponse::class)]
 #[UsesClass(InsufficientFundsException::class)]
@@ -57,7 +59,8 @@ final class VendingMachineTest extends TestCase
         $machine->insertCoin($fiveCents);
 
         // When
-        $processor = new PurchaseProcessor();
+        $changeCalculator = new ChangeCalculator();
+        $processor = new PurchaseProcessor($changeCalculator);
         $result = $machine->purchaseProduct($product, $processor);
 
         // Then
@@ -74,7 +77,8 @@ final class VendingMachineTest extends TestCase
         // When-Then
         $this->expectException(InsufficientFundsException::class);
 
-        $processor = new PurchaseProcessor();
+        $changeCalculator = new ChangeCalculator();
+        $processor = new PurchaseProcessor($changeCalculator);
         $machine->purchaseProduct($product, $processor);
     }
 
@@ -88,7 +92,8 @@ final class VendingMachineTest extends TestCase
         $tenCents = Coin::fromFloat(0.10);
         $fiveCents = Coin::fromFloat(0.05);
 
-        $processor = new PurchaseProcessor();
+        $changeCalculator = new ChangeCalculator();
+        $processor = new PurchaseProcessor($changeCalculator);
 
         // Empty the water stock by buying all 5 waters
         for ($i = 0; $i < 5; $i++) {

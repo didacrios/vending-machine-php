@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\Tests\VendingMachine\Domain;
+namespace VendingMachine\Tests\VendingMachine\Domain\Entity;
 
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
