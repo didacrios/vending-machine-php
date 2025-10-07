@@ -12,9 +12,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
+use VendingMachine\Shared\Domain\Quantity;
 use VendingMachine\VendingMachine\Application\Service\GetInventory\GetInventoryQuery;
 use VendingMachine\VendingMachine\Application\Service\GetInventory\GetInventoryResult;
 use VendingMachine\VendingMachine\Application\Service\Restock\RestockCommand;
+use VendingMachine\VendingMachine\Domain\ValueObject\CoinReserve;
+use VendingMachine\VendingMachine\Domain\ValueObject\Inventory;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 
 #[AsCommand(
@@ -47,27 +50,32 @@ final class RestockConsoleCommand extends Command
         $products = [];
         $change = [];
 
-        if ($water = $input->getOption('water')) {
-            $products[Product::WATER] = (int) $water;
-        }
-        if ($juice = $input->getOption('juice')) {
-            $products[Product::JUICE] = (int) $juice;
-        }
-        if ($soda = $input->getOption('soda')) {
-            $products[Product::SODA] = (int) $soda;
-        }
+        try {
+            if ($water = $input->getOption('water')) {
+                $products[Product::WATER] = new Quantity((int) $water);
+            }
+            if ($juice = $input->getOption('juice')) {
+                $products[Product::JUICE] = new Quantity((int) $juice);
+            }
+            if ($soda = $input->getOption('soda')) {
+                $products[Product::SODA] = new Quantity((int) $soda);
+            }
 
-        if ($coin5 = $input->getOption('coin-5')) {
-            $change[5] = (int) $coin5;
-        }
-        if ($coin10 = $input->getOption('coin-10')) {
-            $change[10] = (int) $coin10;
-        }
-        if ($coin25 = $input->getOption('coin-25')) {
-            $change[25] = (int) $coin25;
-        }
-        if ($coin100 = $input->getOption('coin-100')) {
-            $change[100] = (int) $coin100;
+            if ($coin5 = $input->getOption('coin-5')) {
+                $change['0.05'] = new Quantity((int) $coin5);
+            }
+            if ($coin10 = $input->getOption('coin-10')) {
+                $change['0.10'] = new Quantity((int) $coin10);
+            }
+            if ($coin25 = $input->getOption('coin-25')) {
+                $change['0.25'] = new Quantity((int) $coin25);
+            }
+            if ($coin100 = $input->getOption('coin-100')) {
+                $change['1.00'] = new Quantity((int) $coin100);
+            }
+        } catch (\InvalidArgumentException $e) {
+            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            return Command::FAILURE;
         }
 
         if (empty($products) && empty($change)) {
@@ -76,7 +84,10 @@ final class RestockConsoleCommand extends Command
         }
 
         try {
-            $this->commandBus->dispatch(new RestockCommand($products, $change));
+            $inventory = !empty($products) ? new Inventory($products) : null;
+            $coinReserve = !empty($change) ? new CoinReserve($change) : null;
+
+            $this->commandBus->dispatch(new RestockCommand($inventory, $coinReserve));
 
             // Query to get current inventory (CQRS)
             $envelope = $this->queryBus->dispatch(new GetInventoryQuery());
@@ -101,8 +112,6 @@ final class RestockConsoleCommand extends Command
 
             return Command::SUCCESS;
         } catch (HandlerFailedException $e) {
-            // Symfony Messenger wraps handler exceptions in HandlerFailedException
-            // Extract the original exception to show a clean error message
             foreach ($e->getWrappedExceptions() as $wrappedException) {
                 $output->writeln(sprintf('<error>%s</error>', $wrappedException->getMessage()));
                 return Command::FAILURE;

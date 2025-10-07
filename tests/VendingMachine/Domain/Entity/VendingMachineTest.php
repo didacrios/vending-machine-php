@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use VendingMachine\Shared\Domain\Money;
+use VendingMachine\Shared\Domain\Quantity;
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientFundsException;
 use VendingMachine\VendingMachine\Domain\Exception\ProductOutOfStockException;
@@ -15,12 +16,17 @@ use VendingMachine\VendingMachine\Domain\Service\ChangeCalculator;
 use VendingMachine\VendingMachine\Domain\Service\PurchaseProcessor;
 use VendingMachine\VendingMachine\Domain\Service\PurchaseResponse;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
+use VendingMachine\VendingMachine\Domain\ValueObject\CoinReserve;
+use VendingMachine\VendingMachine\Domain\ValueObject\Inventory;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 
 #[CoversClass(VendingMachine::class)]
 #[UsesClass(Coin::class)]
+#[UsesClass(CoinReserve::class)]
+#[UsesClass(Inventory::class)]
 #[UsesClass(Product::class)]
 #[UsesClass(Money::class)]
+#[UsesClass(Quantity::class)]
 #[UsesClass(ChangeCalculator::class)]
 #[UsesClass(PurchaseProcessor::class)]
 #[UsesClass(PurchaseResponse::class)]
@@ -142,11 +148,11 @@ final class VendingMachineTest extends TestCase
         $machine = new VendingMachine();
 
         // When
-        $machine->restockProducts([
-            Product::WATER => 10,
-            Product::JUICE => 5,
-            Product::SODA => 3
-        ]);
+        $machine->restockProducts(new Inventory([
+            Product::WATER => new Quantity(10),
+            Product::JUICE => new Quantity(5),
+            Product::SODA => new Quantity(3)
+        ]));
 
         // Then
         $products = $machine->getAvailableProducts();
@@ -161,12 +167,12 @@ final class VendingMachineTest extends TestCase
         $machine = new VendingMachine();
 
         // When
-        $machine->restockChange([
-            5 => 20,
-            10 => 15,
-            25 => 10,
-            100 => 5
-        ]);
+        $machine->restockChange(new CoinReserve([
+            '0.05' => new Quantity(20),
+            '0.10' => new Quantity(15),
+            '0.25' => new Quantity(10),
+            '1.00' => new Quantity(5)
+        ]));
 
         // Then
         $change = $machine->getAvailableChange();

@@ -17,12 +17,12 @@ final readonly class RestockCommandHandler
     {
         $vendingMachine = $this->vendingMachineRepository->load();
 
-        if (!empty($command->products)) {
-            $vendingMachine->restockProducts($command->products);
+        if ($command->inventory !== null) {
+            $vendingMachine->restockProducts($command->inventory);
         }
 
-        if (!empty($command->change)) {
-            $vendingMachine->restockChange($command->change);
+        if ($command->coinReserve !== null) {
+            $vendingMachine->restockChange($command->coinReserve);
         }
 
         $this->vendingMachineRepository->save($vendingMachine);

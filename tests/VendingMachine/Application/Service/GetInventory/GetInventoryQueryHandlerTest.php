@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use VendingMachine\Shared\Domain\Money;
+use VendingMachine\Shared\Domain\Quantity;
 use VendingMachine\Tests\VendingMachine\Domain\Entity\VendingMachineObjectMother;
 use VendingMachine\VendingMachine\Application\Service\GetInventory\GetInventoryQuery;
 use VendingMachine\VendingMachine\Application\Service\GetInventory\GetInventoryQueryHandler;
@@ -15,13 +16,18 @@ use VendingMachine\VendingMachine\Application\Service\GetInventory\GetInventoryR
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
 use VendingMachine\VendingMachine\Domain\Repository\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
+use VendingMachine\VendingMachine\Domain\ValueObject\CoinReserve;
+use VendingMachine\VendingMachine\Domain\ValueObject\Inventory;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 
 #[CoversClass(GetInventoryQueryHandler::class)]
 #[UsesClass(GetInventoryQuery::class)]
 #[UsesClass(GetInventoryResult::class)]
 #[UsesClass(Coin::class)]
+#[UsesClass(CoinReserve::class)]
+#[UsesClass(Inventory::class)]
 #[UsesClass(Money::class)]
+#[UsesClass(Quantity::class)]
 #[UsesClass(VendingMachine::class)]
 #[UsesClass(Product::class)]
 final class GetInventoryQueryHandlerTest extends TestCase
@@ -39,17 +45,17 @@ final class GetInventoryQueryHandlerTest extends TestCase
     {
         // Given
         $vendingMachine = VendingMachineObjectMother::empty();
-        $vendingMachine->restockProducts([
-            Product::WATER => 10,
-            Product::JUICE => 5,
-            Product::SODA => 3
-        ]);
-        $vendingMachine->restockChange([
-            5 => 20,
-            10 => 15,
-            25 => 10,
-            100 => 5
-        ]);
+        $vendingMachine->restockProducts(new Inventory([
+            Product::WATER => new Quantity(10),
+            Product::JUICE => new Quantity(5),
+            Product::SODA => new Quantity(3)
+        ]));
+        $vendingMachine->restockChange(new CoinReserve([
+            '0.05' => new Quantity(20),
+            '0.10' => new Quantity(15),
+            '0.25' => new Quantity(10),
+            '1.00' => new Quantity(5)
+        ]));
 
         $this->repository
             ->expects(self::once())

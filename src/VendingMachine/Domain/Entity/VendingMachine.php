@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use VendingMachine\Shared\Domain\Money;
 use VendingMachine\VendingMachine\Domain\Service\PurchaseProcessor;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
+use VendingMachine\VendingMachine\Domain\ValueObject\CoinReserve;
+use VendingMachine\VendingMachine\Domain\ValueObject\Inventory;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 
 #[ORM\Entity]
@@ -96,17 +98,19 @@ final class VendingMachine
         return $this->lastChangeDispensed;
     }
 
-    public function restockProducts(array $products): void
+    public function restockProducts(Inventory $inventory): void
     {
-        foreach ($products as $productName => $quantity) {
-            $this->availableProducts[$productName] = $quantity;
+        foreach ($inventory->products() as $productName => $quantity) {
+            $this->availableProducts[$productName] = $quantity->value();
         }
     }
 
-    public function restockChange(array $change): void
+    public function restockChange(CoinReserve $coinReserve): void
     {
-        foreach ($change as $coinValue => $quantity) {
-            $this->availableChange[$coinValue] = $quantity;
+        foreach ($coinReserve->coins() as $coinDenomination => $quantity) {
+            // Convert string denomination "0.25" to cents (25)
+            $cents = (int) round((float) $coinDenomination * 100);
+            $this->availableChange[$cents] = $quantity->value();
         }
     }
 
