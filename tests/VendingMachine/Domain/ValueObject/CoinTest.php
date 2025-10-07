@@ -29,10 +29,10 @@ final class CoinTest extends TestCase
     public static function validCoinsProvider(): array
     {
         return [
-            '5 cents' => [0.05, 0.05],
-            '10 cents' => [0.10, 0.10],
-            '25 cents' => [0.25, 0.25],
-            '1 Euro' => [1.00, 1.00],
+            '5 cents' => [Coin::FIVE_CENTS, Coin::FIVE_CENTS],
+            '10 cents' => [Coin::TEN_CENTS, Coin::TEN_CENTS],
+            '25 cents' => [Coin::TWENTY_FIVE_CENTS, Coin::TWENTY_FIVE_CENTS],
+            '1 Euro' => [Coin::ONE_EURO, Coin::ONE_EURO],
         ];
     }
 
@@ -40,6 +40,7 @@ final class CoinTest extends TestCase
     {
         // Given-When-Then
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid coin value');
 
         Coin::fromFloat(0.50);
     }

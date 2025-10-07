@@ -6,6 +6,10 @@ namespace VendingMachine\Shared\Domain;
 
 final class Money implements \Stringable
 {
+    private const CURRENCY_CODE = 'EUR';
+    private const CURRENCY_SYMBOL = '€';
+    private const SYMBOL_AFTER_AMOUNT = true;
+
     public function __construct(
         private readonly int $cents
     ) {
@@ -50,8 +54,24 @@ final class Money implements \Stringable
         return $this->cents / 100;
     }
 
+    public function currencyCode(): string
+    {
+        return self::CURRENCY_CODE;
+    }
+
+    public function currencySymbol(): string
+    {
+        return self::CURRENCY_SYMBOL;
+    }
+
     public function __toString(): string
     {
-        return sprintf('%.2f', $this->toFloat());
+        $amount = sprintf('%.2f', $this->toFloat());
+
+        if (self::SYMBOL_AFTER_AMOUNT) {
+            return sprintf('%s %s', $amount, self::CURRENCY_SYMBOL);
+        }
+
+        return sprintf('%s%s', self::CURRENCY_SYMBOL, $amount);
     }
 }

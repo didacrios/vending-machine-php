@@ -42,13 +42,11 @@ final class ReturnCoinConsoleCommand extends Command
 
             $output->writeln('<info>Coins returned:</info>');
             foreach ($result->returnedCoins as $coin) {
-                $output->writeln(sprintf('  €%.2f', $coin->value()->toFloat()));
+                $output->writeln(sprintf('  %s', $coin->value()));
             }
 
             return Command::SUCCESS;
         } catch (HandlerFailedException $e) {
-            // Symfony Messenger wraps handler exceptions in HandlerFailedException
-            // Extract the original exception to show a clean error message
             foreach ($e->getWrappedExceptions() as $wrappedException) {
                 $output->writeln(sprintf('<error>%s</error>', $wrappedException->getMessage()));
                 return Command::FAILURE;

@@ -49,14 +49,12 @@ final class InsertCoinConsoleCommand extends Command
             $totalAmount = $vendingMachine->getInsertedAmount();
 
             $output->writeln(sprintf(
-                '<info>Coin inserted successfully! Total amount: €%.2f</info>',
-                $totalAmount->toFloat()
+                '<info>Coin inserted successfully! Total amount: %s</info>',
+                $totalAmount
             ));
 
             return Command::SUCCESS;
         } catch (HandlerFailedException $e) {
-            // Symfony Messenger wraps handler exceptions in HandlerFailedException
-            // Extract the original exception to show a clean error message
             foreach ($e->getWrappedExceptions() as $wrappedException) {
                 if ($wrappedException instanceof \InvalidArgumentException) {
                     $output->writeln(sprintf('<error>%s</error>', $wrappedException->getMessage()));

@@ -16,6 +16,7 @@ use VendingMachine\Shared\Domain\Quantity;
 use VendingMachine\VendingMachine\Application\Service\GetInventory\GetInventoryQuery;
 use VendingMachine\VendingMachine\Application\Service\GetInventory\GetInventoryResult;
 use VendingMachine\VendingMachine\Application\Service\Restock\RestockCommand;
+use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 use VendingMachine\VendingMachine\Domain\ValueObject\CoinReserve;
 use VendingMachine\VendingMachine\Domain\ValueObject\Inventory;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
@@ -62,16 +63,16 @@ final class RestockConsoleCommand extends Command
             }
 
             if ($coin5 = $input->getOption('coin-5')) {
-                $change['0.05'] = new Quantity((int) $coin5);
+                $change[sprintf('%.2f', Coin::FIVE_CENTS)] = new Quantity((int) $coin5);
             }
             if ($coin10 = $input->getOption('coin-10')) {
-                $change['0.10'] = new Quantity((int) $coin10);
+                $change[sprintf('%.2f', Coin::TEN_CENTS)] = new Quantity((int) $coin10);
             }
             if ($coin25 = $input->getOption('coin-25')) {
-                $change['0.25'] = new Quantity((int) $coin25);
+                $change[sprintf('%.2f', Coin::TWENTY_FIVE_CENTS)] = new Quantity((int) $coin25);
             }
             if ($coin100 = $input->getOption('coin-100')) {
-                $change['1.00'] = new Quantity((int) $coin100);
+                $change[sprintf('%.2f', Coin::ONE_EURO)] = new Quantity((int) $coin100);
             }
         } catch (\InvalidArgumentException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
@@ -105,9 +106,14 @@ final class RestockConsoleCommand extends Command
 
             $output->writeln('');
             $output->writeln('<comment>Current change:</comment>');
-            $coinLabels = [5 => '0.05', 10 => '0.10', 25 => '0.25', 100 => '1.00'];
+            $coinLabels = [
+                5 => sprintf('%.2f', Coin::FIVE_CENTS),
+                10 => sprintf('%.2f', Coin::TEN_CENTS),
+                25 => sprintf('%.2f', Coin::TWENTY_FIVE_CENTS),
+                100 => sprintf('%.2f', Coin::ONE_EURO),
+            ];
             foreach ($inventory->change as $coinValue => $quantity) {
-                $output->writeln(sprintf('  €%s: %d coins', $coinLabels[$coinValue], $quantity));
+                $output->writeln(sprintf('  %s: %d coins', $coinLabels[$coinValue], $quantity));
             }
 
             return Command::SUCCESS;

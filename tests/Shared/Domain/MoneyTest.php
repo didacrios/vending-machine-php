@@ -86,7 +86,7 @@ final class MoneyTest extends TestCase
         $string = (string) $money;
 
         // Then
-        $this->assertEquals('1.25', $string);
+        $this->assertEquals('1.25 €', $string);
     }
 
     public function testItShouldImplementStringable(): void
@@ -96,7 +96,7 @@ final class MoneyTest extends TestCase
 
         // Then
         $this->assertInstanceOf(\Stringable::class, $money);
-        $this->assertEquals('0.65', (string) $money);
+        $this->assertEquals('0.65 €', (string) $money);
     }
 
     public function testItShouldCheckIfMoneyIsLessThanOrEqual(): void

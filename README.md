@@ -22,28 +22,28 @@ Once you have the environment running (`make setup`), access the shell (`make sh
 # First, restock the machine with products and change
 php bin/console vending-machine:restock --water=5 --juice=5 --soda=5 --coin-5=10 --coin-10=10 --coin-25=10 --coin-100=5
 
-# Insert coins (total $1.50)
+# Insert coins (total €1.50)
 php bin/console vending-machine:insert-coin 1.00
 php bin/console vending-machine:insert-coin 0.25
 php bin/console vending-machine:insert-coin 0.25
 
-# Purchase WATER ($1.50)
+# Purchase WATER (€1.50)
 php bin/console vending-machine:purchase-product WATER
 ```
 
 #### USER_STORY_002: Receive change when overpaying
 ```bash
-# Insert coins (total $2.00)
+# Insert coins (total €2.00)
 php bin/console vending-machine:insert-coin 1.00
 php bin/console vending-machine:insert-coin 1.00
 
-# Purchase JUICE ($1.75) - should receive $0.25 change
+# Purchase JUICE (€1.75) - should receive €0.25 change
 php bin/console vending-machine:purchase-product JUICE
 ```
 
 #### USER_STORY_003: Return inserted money
 ```bash
-# Insert coins (total $1.00)
+# Insert coins (total €1.00)
 php bin/console vending-machine:insert-coin 0.25
 php bin/console vending-machine:insert-coin 0.25
 php bin/console vending-machine:insert-coin 0.25

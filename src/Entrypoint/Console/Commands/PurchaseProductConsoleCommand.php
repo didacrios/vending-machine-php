@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
+use VendingMachine\Shared\Domain\Money;
 use VendingMachine\VendingMachine\Application\Customer\Purchase\PurchaseProductCommand;
 use VendingMachine\VendingMachine\Application\Customer\Purchase\PurchaseProductResult;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientChangeException;
@@ -57,7 +58,7 @@ final class PurchaseProductConsoleCommand extends Command
             ));
 
             if (!empty($result->changeCoins)) {
-                $changeAmounts = array_map(fn($cents) => sprintf('%.2f', $cents / 100), $result->changeCoins);
+                $changeAmounts = array_map(fn($cents) => (string) new Money($cents), $result->changeCoins);
                 $output->writeln(sprintf(
                     '<info>Change returned: %s</info>',
                     implode(', ', $changeAmounts)
