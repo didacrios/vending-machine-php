@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\tests\VendingMachine\Application\Purchase;
+namespace VendingMachine\Tests\VendingMachine\Application\Customer\Purchase;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use VendingMachine\Shared\Domain\Money;
 use VendingMachine\Tests\VendingMachine\Domain\Entity\VendingMachineObjectMother;
-use VendingMachine\VendingMachine\Application\Purchase\PurchaseProductCommand;
-use VendingMachine\VendingMachine\Application\Purchase\PurchaseProductCommandHandler;
-use VendingMachine\VendingMachine\Application\Purchase\PurchaseProductResult;
+use VendingMachine\VendingMachine\Application\Customer\Purchase\PurchaseProductCommand;
+use VendingMachine\VendingMachine\Application\Customer\Purchase\PurchaseProductCommandHandler;
+use VendingMachine\VendingMachine\Application\Customer\Purchase\PurchaseProductResult;
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientChangeException;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientFundsException;

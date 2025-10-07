@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\tests\VendingMachine\Application\InsertCoin;
+namespace VendingMachine\Tests\VendingMachine\Application\Customer\InsertCoin;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use VendingMachine\Shared\Domain\Money;
 use VendingMachine\Tests\VendingMachine\Domain\Entity\VendingMachineObjectMother;
-use VendingMachine\VendingMachine\Application\InsertCoin\InsertCoinCommand;
-use VendingMachine\VendingMachine\Application\InsertCoin\InsertCoinCommandHandler;
+use VendingMachine\VendingMachine\Application\Customer\InsertCoin\InsertCoinCommand;
+use VendingMachine\VendingMachine\Application\Customer\InsertCoin\InsertCoinCommandHandler;
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
 use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;

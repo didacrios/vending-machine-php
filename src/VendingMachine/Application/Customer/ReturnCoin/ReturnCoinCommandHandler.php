@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\VendingMachine\Application\ReturnCoin;
+namespace VendingMachine\VendingMachine\Application\Customer\ReturnCoin;
 
 use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
 

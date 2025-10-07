@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\VendingMachine\Application\Purchase;
+namespace VendingMachine\VendingMachine\Application\Customer\Purchase;
 
 use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\Service\PurchaseProcessor;

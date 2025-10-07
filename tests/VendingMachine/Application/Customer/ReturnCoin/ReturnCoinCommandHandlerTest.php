@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\Tests\VendingMachine\Application\ReturnCoin;
+namespace VendingMachine\Tests\VendingMachine\Application\Customer\ReturnCoin;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use VendingMachine\Shared\Domain\Money;
 use VendingMachine\Tests\VendingMachine\Domain\Entity\VendingMachineObjectMother;
-use VendingMachine\VendingMachine\Application\ReturnCoin\ReturnCoinCommand;
-use VendingMachine\VendingMachine\Application\ReturnCoin\ReturnCoinCommandHandler;
-use VendingMachine\VendingMachine\Application\ReturnCoin\ReturnCoinResult;
+use VendingMachine\VendingMachine\Application\Customer\ReturnCoin\ReturnCoinCommand;
+use VendingMachine\VendingMachine\Application\Customer\ReturnCoin\ReturnCoinCommandHandler;
+use VendingMachine\VendingMachine\Application\Customer\ReturnCoin\ReturnCoinResult;
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
 use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;

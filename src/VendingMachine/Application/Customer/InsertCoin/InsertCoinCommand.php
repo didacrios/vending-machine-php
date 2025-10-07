@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\VendingMachine\Application\InsertCoin;
+namespace VendingMachine\VendingMachine\Application\Customer\InsertCoin;
 
 final class InsertCoinCommand
 {

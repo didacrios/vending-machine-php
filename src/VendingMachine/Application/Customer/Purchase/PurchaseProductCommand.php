@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\VendingMachine\Application\Purchase;
+namespace VendingMachine\VendingMachine\Application\Customer\Purchase;
 
 final class PurchaseProductCommand
 {

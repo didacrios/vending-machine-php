@@ -22,12 +22,12 @@ services:
         arguments:
             $changeCalculator: '@VendingMachine\VendingMachine\Domain\Service\ChangeCalculator'
 
-    # Command Handlers
-    VendingMachine\VendingMachine\Application\InsertCoin\InsertCoinCommandHandler:
+    # Command Handlers - Customer
+    VendingMachine\VendingMachine\Application\Customer\InsertCoin\InsertCoinCommandHandler:
         tags: ['messenger.message_handler']
 
-    VendingMachine\VendingMachine\Application\Purchase\PurchaseProductCommandHandler:
+    VendingMachine\VendingMachine\Application\Customer\Purchase\PurchaseProductCommandHandler:
         tags: ['messenger.message_handler']
 
-    VendingMachine\VendingMachine\Application\ReturnCoin\ReturnCoinCommandHandler:
+    VendingMachine\VendingMachine\Application\Customer\ReturnCoin\ReturnCoinCommandHandler:
         tags: ['messenger.message_handler']

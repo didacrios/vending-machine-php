@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\VendingMachine\Application\InsertCoin;
+namespace VendingMachine\VendingMachine\Application\Customer\InsertCoin;
 
 use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
