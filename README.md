@@ -1,218 +1,214 @@
 # Vending Machine - Technical Challenge
 
-A vending machine simulation built with Symfony 7.3.3, following DDD + Hexagonal Architecture principles. This project implements a vending machine that accepts coins, dispenses items, and handles change.
+A vending machine simulation built with PHP 8.4 and Symfony 7.3.3, following Domain-Driven Design (DDD) and Hexagonal Architecture principles. This project implements a functional vending machine that handles coin insertion, product purchases, change calculation, and inventory management.
 
-## 🎯 Project Requirements
+## 🎯 User Stories
 
-The vending machine requirements have been refined and converted into user stories for iterative development:
+The vending machine requirements have been broken down into user stories for iterative development:
 
-### 📋 User Stories
-
-- **[USER_STORY_001.md](USER_STORY_001.md)** - As a customer, I want to insert money and purchase items, so that I can get the products I need
-- **[USER_STORY_002.md](USER_STORY_002.md)** - As a customer, I want to receive change when I overpay for an item, so that I don't lose money
-- **[USER_STORY_003.md](USER_STORY_003.md)** - As a customer, I want to return my inserted money if I change my mind, so that I can get my money back
-- **[USER_STORY_004.md](USER_STORY_004.md)** - As a service person, I want to restock items and change in the machine, so that customers can continue to use the vending machine
+- **[USER_STORY_001.md](USER_STORY_001.md)** - As a customer, I want to insert money and purchase items
+- **[USER_STORY_002.md](USER_STORY_002.md)** - As a customer, I want to receive change when I overpay for an item
+- **[USER_STORY_003.md](USER_STORY_003.md)** - As a customer, I want to return my inserted money if I change my mind
+- **[USER_STORY_004.md](USER_STORY_004.md)** - As a service person, I want to restock items and change in the machine
 
 Each user story includes acceptance tests in Gherkin format to guide development.
 
 ## 🏗️ Technical Foundation
 
-This project is built on a LAMP (Linux - Apache - MySQL/MariaDB - PHP) skeleton for Symfony 7.3.3 projects with Docker and Docker Compose, following DDD + Hexagonal Architecture principles.
+This project is built on a custom PHP DDD skeleton, forked from [php-ddd-skeleton](https://github.com/didacrios/php-ddd-skeleton), which provides:
+
+- **Docker-based development environment** (PHP 8.4 + Apache + MariaDB)
+- **DDD + Hexagonal Architecture** structure
+- **Symfony 7.3.3** with Messenger for CQRS
+- **PHPUnit 12** for testing
+- **PHPStan** for static analysis
+
+The skeleton was developed by myself and customized and adapted specifically for this vending machine implementation.
+
+## 🔄 Development Process
+
+This project was developed following **Test-Driven Development (TDD)** principles with an iterative approach:
+
+- **Red-Green-Refactor cycle**: Write failing tests → Make them pass → Refactor
+- **Iterative implementation**: Each user story was developed incrementally
+- **Commit history as documentation**: All design decisions and thought processes are reflected in the commit messages
+
+The git history provides a complete narrative of the development process.
 
 ## 🚀 Quick Start
 
-1. **Clone the skeleton:**
+### Prerequisites
+- Docker
+- Docker Compose
+- Make
+
+### Setup
+
+1. **Clone the repository:**
    ```bash
-   git clone <your-repo-url> my-new-project
-   cd my-new-project
+   git clone <repository-url> vending-machine
+   cd vending-machine
    ```
 
-2. **Configure your project** in `Makefile`:
+2. **Configure (optional):**
+
+   If you need to change ports or other settings, edit the `Makefile`:
    ```makefile
-   PROJECT_NAME := my-project
-   APP_NAMESPACE := MyProject
-   # ... other variables
+   APACHE_PORT := 8085    # Web access port
+   DB_PORT := 13309       # Database port
    ```
+
+   Or edit `docker-compose.yml` directly for more control.
 
 3. **Run setup:**
    ```bash
    make setup
    ```
 
-   This will automatically:
-   - Process all template files with your namespace
-   - Generate personalized configuration files
-   - Set up Docker containers
-   - Install dependencies
-   - Configure Composer autoload
-   - Clean up template files (no longer needed)
+   This will:
+   - Build and start Docker containers
+   - Install all dependencies
+   - Configure the application
 
-4. **Access your application:**
-   - Web: http://localhost:8089
-   - Database: localhost:13307
+4. **Verify installation:**
+   ```bash
+   make test
+   ```
 
-Or the possible domain alias and ports configured in the Makefile.
+## 💻 Using the Application
+
+The vending machine is a **terminal-based application** using Symfony Console commands.
+
+### List Available Commands
+
+```bash
+make vending-machine-help
+```
+
+This will display all available vending machine operations:
+- `vending-machine:insert-coin` - Insert coins into the machine
+- `vending-machine:purchase-product` - Purchase a product
+- `vending-machine:return-coin` - Return inserted coins
+- `vending-machine:restock` - Restock products and change (service operation)
+
+### Execute Commands
+
+1. **Access the container shell:**
+   ```bash
+   make shell
+   ```
+
+2. **Run commands:**
+   ```bash
+   # Get help for a specific command
+   php bin/console vending-machine:insert-coin --help
+
+   # Insert a coin
+   php bin/console vending-machine:insert-coin 0.25
+
+   # Purchase a product
+   php bin/console vending-machine:purchase-product WATER
+
+   # Return coins
+   php bin/console vending-machine:return-coin
+
+   # Restock (service operation)
+   php bin/console vending-machine:restock
+   ```
+
+## 🛠️ Essential Commands
+
+### Setup & Installation
+```bash
+make setup                  # Complete project setup
+```
+
+### Testing
+```bash
+make test                   # Run all tests
+make test-with-coverage     # Run tests with coverage report (requires Xdebug)
+```
+
+### Development
+```bash
+make vending-machine-help   # List all vending machine commands
+make shell                  # Access container shell to run commands
+make logs                   # Show container logs
+make quality                # Run PHPStan + all tests
+```
+
+### Other Commands
+See the `Makefile` for additional commands including database management, cache clearing, and more.
 
 ## 📁 Project Structure
 
 ```
 src/
-├── Entrypoint/                 # Entry points to the application
-│   ├── Http/Controllers/       # HTTP Controllers
-│   └── Console/Commands/       # Console Commands
-└── Shared/                     # Shared components
-    ├── Application/            # Application services, commands, queries
-    ├── Domain/                 # Domain entities, value objects, repositories
-    └── Infrastructure/         # Infrastructure implementations
+├── Entrypoint/
+│   └── Console/Commands/          # Console commands (user interface)
+├── Shared/
+│   └── Domain/
+│       └── Money.php              # Shared value object
+└── VendingMachine/
+    ├── Application/               # Use cases (CQRS handlers)
+    │   ├── Customer/              # Customer operations
+    │   └── Service/               # Service operations
+    ├── Domain/                    # Business logic
+    │   ├── Entity/
+    │   ├── ValueObject/
+    │   ├── Repository/
+    │   ├── Service/
+    │   └── Exception/
+    └── Infrastructure/            # Technical implementation
+        └── Repository/
 ```
 
-## ⚙️ Configuration
+## 🏛️ Architecture
 
-The project uses a `Makefile` with configurable variables:
+The project follows **Domain-Driven Design (DDD)** and **Hexagonal Architecture**:
 
-- `PROJECT_NAME`: Project identifier
-- `APP_NAMESPACE`: PHP namespace (default: App)
-- `DOCKER_CONTAINER_NAME`: Docker container name
-- `DOCKER_NETWORK`: Docker network name
-- `SUBNET_IP`: Docker subnet IP range
-- `SUBNET_ALIAS`: Local domain alias
-- `APACHE_PORT`: Apache port (default: 8089)
-- `DB_PORT`: Database port (default: 13307)
-- `DB_NAME`: Database name
-- `DB_USER`: Database user
-- `DB_PASSWORD`: Database password
+- **Domain Layer**: Core business logic, entities, value objects, and domain services
+- **Application Layer**: Use cases implemented as command/query handlers (CQRS pattern)
+- **Infrastructure Layer**: Technical implementations (repositories, persistence)
+- **Entrypoint Layer**: User interfaces (console commands, HTTP controllers)
 
-## 🔧 Template System
-
-The skeleton uses a template system that automatically generates personalized files based on your configuration. When you run `make setup`, the following files are automatically generated with your namespace:
-- `bin/console` - Symfony console entry point
-- `public/index.php` - Web entry point
-- `src/Kernel.php` - Application kernel
-- `config/packages/doctrine.yaml` - Doctrine configuration
-- `phpunit.xml` - PHPUnit configuration
-- All source code files in `src/`
-- All test files in `tests/`
-
-This ensures that when you clone the skeleton and change the `APP_NAMESPACE` in the Makefile, all files are automatically updated with your custom namespace.
-
-## 🛠️ Available Commands
-
-### Setup & Installation
-- `make setup` - Complete project setup
-- `make process-templates` - Process template files
-- `make check-dependencies` - Check required tools
-- `make check-conflicts` - Check for port/network conflicts
-
-### Development
-- `make dev` - Start development environment
-- `make logs` - Show container logs
-- `make shell` - Open shell in web container
-- `make db-shell` - Open MySQL shell
-
-### Testing
-- `make test` - Run all tests
-- `make test-unit` - Run unit tests
-- `make test-integration` - Run integration tests
-
-### Code Quality
-- `make phpstan` - Run PHPStan static analysis
-- `make phpstan-baseline` - Generate PHPStan baseline
-- `make quality` - Run all quality checks (PHPStan + Tests)
-
-### Cleanup
-- `make clean` - Clean up containers and images
-- `make reset` - Reset everything (containers, images, network)
+Key patterns used:
+- **CQRS**: Commands for write operations, Queries for read operations
+- **Repository Pattern**: Abstraction over data persistence
+- **Value Objects**: Immutable objects for domain concepts (Money, Coin, Product)
+- **Domain Services**: Business logic that doesn't belong to a single entity
 
 ## 🧪 Testing
 
-The project includes three test suites with a structure that mirrors the production code:
+The project maintains a comprehensive test suite with:
 
-- **All**: Runs all tests
-- **Unit**: Unit tests for domain and application layers
-- **Integration**: Integration tests mainly in infrastructure layers
+- **Unit Tests**: Domain and application layer logic (handlers, domain services, entities, value objects)
+- **Test Coverage**: Aim for 80%+ code coverage
+- **TDD Approach**: Tests written before implementation
 
-Tests follow the Given-When-Then format and use PHPUnit 12.
+Run tests with:
+```bash
+make test                   # All tests
+make test-with-coverage     # With coverage report
+```
 
-## 📦 Included Packages
+### Why No Integration Tests?
 
-### Production
-- Symfony 7.3.3
-- Symfony Dotenv
-- Symfony Messenger
-- Twig
-- PHPMailer
+Integration tests for console commands and infrastructure layers were deliberately omitted because:
+- **Business logic is fully covered**: All application handlers and domain services have comprehensive unit tests
+- **Console commands are thin wrappers**: They only parse arguments and dispatch to already-tested handlers
+- **Manual testing is straightforward**: The terminal interface makes manual verification simple and quick
+- **Cost-benefit analysis**: For an assessment context, the time investment doesn't justify the marginal additional coverage
 
-### Development
-- PHPUnit 12
-- PHPStan (Level 6)
-- PHPStan Symfony Extension
-- PHPStan Doctrine Extension
-- Rector
-- Symfony Web Profiler
-- Symfony Maker Bundle
+The core business logic is thoroughly tested, and the thin integration layers can be reliably verified through manual testing.
 
-## 🏗️ Architecture
+## 📝 Configuration
 
-This skeleton follows **Domain-Driven Design (DDD)** and **Hexagonal Architecture** principles:
-
-- **Entrypoint Layer**: HTTP Controllers and Console Commands
-- **Application Layer**: Use cases, commands, queries
-- **Domain Layer**: Business logic, entities, value objects
-- **Infrastructure Layer**: External concerns (database, HTTP clients, etc.)
-
-## 📝 Configuration Files
-
-- **Routing**: Modular YAML files in `config/routes/`
-- **Services**: Modular YAML files in `config/services/`
-- **Docker**: Template-based configuration with variable substitution
-
-## 🔧 Customization
-
-1. **Change project name**: Edit `PROJECT_NAME` in `Makefile`
-2. **Add new aggregates**: Create directories under `src/` following the pattern
-3. **Add new routes**: Create YAML files in `config/routes/`
-4. **Add new services**: Create YAML files in `config/services/`
-
-## 📋 Example Usage
-
-After setup, you can:
-
-1. **Test the HelloWorld controller:**
-   ```bash
-   curl http://localhost:8089/hello
-   curl http://localhost:8089/hello/Alice
-   ```
-
-2. **Test the HelloWorld command:**
-   ```bash
-   make shell
-   php bin/console app:hello-world
-   php bin/console app:hello-world Alice
-   ```
-
-3. **Run tests and quality checks:**
-   ```bash
-   make test
-   make phpstan
-   make quality  # Runs both PHPStan and tests
-   ```
-
-## 🐳 Docker
-
-The project uses Docker with:
-- **PHP 8.4** with Apache
-- **MariaDB 10.2**
-- **Custom network** with fixed IPs
-- **Volume mounting** for development
+- **Docker**: `docker-compose.yml` and `.docker/` directory
+- **Symfony**: `config/` directory with modular YAML files
+- **Database**: MariaDB 10.2 (configured in docker-compose.yml)
+- **PHP**: PHP 8.4 with Xdebug for coverage
 
 ## 📄 License
 
 This project is released into the public domain under the [Creative Commons Zero (CC0) License](LICENSE).
-
-You are free to:
-- ✅ Use this code for any purpose (commercial or non-commercial)
-- ✅ Modify, distribute, and redistribute without restrictions
-- ✅ Include in proprietary projects
-- ✅ No attribution required
-
-For more details, see the [LICENSE](LICENSE) file.

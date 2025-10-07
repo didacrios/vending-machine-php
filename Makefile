@@ -157,6 +157,12 @@ shell: ## Open shell in web container
 db-shell: ## Open MySQL shell
 	@docker exec -it $(DOCKER_DB_CONTAINER_NAME) mysql -u$(DB_USER) -p$(DB_PASSWORD) $(DB_NAME)
 
+# Vending Machine commands
+.PHONY: vending-machine-help
+vending-machine-help: ## List all vending machine commands
+	@echo "$(GREEN)🎰 Vending Machine Commands:$(NC)"
+	@docker exec $(DOCKER_CONTAINER_NAME) php bin/console list vending-machine | grep "vending-machine:"
+
 # Testing commands
 .PHONY: test
 test: ## Run all tests
@@ -167,11 +173,6 @@ test: ## Run all tests
 test-unit: ## Run unit tests
 	@echo "$(GREEN)🧪 Running unit tests...$(NC)"
 	@docker exec $(DOCKER_CONTAINER_NAME) ./vendor/bin/phpunit --testsuite=Unit
-
-.PHONY: test-integration
-test-integration: ## Run integration tests
-	@echo "$(GREEN)🧪 Running integration tests...$(NC)"
-	@docker exec $(DOCKER_CONTAINER_NAME) ./vendor/bin/phpunit --testsuite=Integration
 
 .PHONY: test-with-coverage
 test-with-coverage: ## Run tests with coverage report (requires Xdebug)
