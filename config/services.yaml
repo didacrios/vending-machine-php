@@ -3,7 +3,6 @@
 
 imports:
     - { resource: services/entrypoint.yaml }
-    - { resource: services/shared.yaml }
     - { resource: services/vendingmachine.yaml }
 
 # Add more domain-specific service files here as needed

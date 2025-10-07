@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace VendingMachine\VendingMachine\Application\Customer\ReturnCoin;
 
-final class ReturnCoinCommand
+final readonly class ReturnCoinCommand
 {
 }
 

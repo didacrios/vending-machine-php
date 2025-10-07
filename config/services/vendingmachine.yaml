@@ -10,7 +10,7 @@ services:
             $entityManager: '@doctrine.orm.entity_manager'
 
     # Repository interface alias
-    VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface:
+    VendingMachine\VendingMachine\Domain\Repository\VendingMachineRepositoryInterface:
         alias: VendingMachine\VendingMachine\Infrastructure\Repository\DoctrineVendingMachineRepository
 
     # Domain Services
