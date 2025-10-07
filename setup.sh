@@ -448,9 +448,10 @@ echo -e "${GREEN}✅ Template files cleaned up${NC}"
 
 echo -e "${GREEN}🔐 Fixing file permissions...${NC}"
 sudo chown -R $(whoami):$(whoami) .
-chmod -R 755 .
+find . -type d -not -path "./vendor/*" -not -path "./.git/*" -exec chmod 755 {} \;
+find . -type f -not -path "./vendor/*" -not -path "./.git/*" -exec chmod 644 {} \;
+chmod +x bin/console
 chmod -R 777 var/
-chmod -R 755 public/
 echo -e "${GREEN}✅ Permissions fixed${NC}"
 
 
