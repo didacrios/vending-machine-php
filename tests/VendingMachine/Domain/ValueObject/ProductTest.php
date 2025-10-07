@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\Tests\Product;
+namespace VendingMachine\Tests\VendingMachine\Domain\ValueObject;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use VendingMachine\Product\Product;
+use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 use VendingMachine\Shared\Domain\Money;
 
 #[CoversClass(Product::class)]

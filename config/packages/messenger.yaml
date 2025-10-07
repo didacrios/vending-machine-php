@@ -7,11 +7,13 @@ framework:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
             # async: '%env(MESSENGER_TRANSPORT_DSN)%'
             # failed: 'doctrine://default?queue_name=failed'
-            # sync: 'sync://'
+            sync: 'sync://'
 
         routing:
             # Route your messages to the transports
-            # 'App\Message\YourMessage': async
+            # Commands are handled synchronously
+            'VendingMachine\VendingMachine\Application\Command\InsertCoinCommand': sync
+            'VendingMachine\VendingMachine\Application\Command\GetProductCommand': sync
 
 # when@test:
 #    framework:

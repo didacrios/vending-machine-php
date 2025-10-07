@@ -12,3 +12,10 @@ services:
     # Repository interface alias
     VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface:
         alias: VendingMachine\VendingMachine\Infrastructure\Repository\DoctrineVendingMachineRepository
+
+    # Command Handlers
+    VendingMachine\VendingMachine\Application\Command\InsertCoinHandler:
+        tags: ['messenger.message_handler']
+
+    VendingMachine\VendingMachine\Application\Command\GetProductHandler:
+        tags: ['messenger.message_handler']

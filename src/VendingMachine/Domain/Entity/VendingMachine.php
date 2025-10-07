@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace VendingMachine\VendingMachine\Domain\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use VendingMachine\Coin\Coin;
 use VendingMachine\Shared\Domain\Money;
-use VendingMachine\Product\Product;
+use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
+use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientFundsException;
 use VendingMachine\VendingMachine\Domain\Exception\ProductOutOfStockException;
 
@@ -126,5 +126,12 @@ final class VendingMachine
     private function clearInsertedCoins(): void
     {
         $this->insertedCoins = [];
+    }
+
+    public function reset(): void
+    {
+        $this->insertedCoins = [];
+        $this->initializeProducts();
+        $this->initializeChange();
     }
 }

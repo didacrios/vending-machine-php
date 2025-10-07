@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\Tests\Coin;
+namespace VendingMachine\Tests\VendingMachine\Domain\ValueObject;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use VendingMachine\Coin\Coin;
+use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 use VendingMachine\Shared\Domain\Money;
 
 #[CoversClass(Coin::class)]
@@ -44,4 +44,3 @@ final class CoinTest extends TestCase
         Coin::fromFloat(0.50);
     }
 }
-

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\Coin;
+namespace VendingMachine\VendingMachine\Domain\ValueObject;
 
 use VendingMachine\Shared\Domain\Money;
 
@@ -29,4 +29,3 @@ final class Coin
         return $this->value;
     }
 }
-

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\Product;
+namespace VendingMachine\VendingMachine\Domain\ValueObject;
 
 use VendingMachine\Shared\Domain\Money;
 
@@ -36,4 +36,3 @@ final class Product
         return Money::fromFloat(self::PRICES[$this->name]);
     }
 }
-

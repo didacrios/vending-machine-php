@@ -6,7 +6,7 @@ namespace VendingMachine\VendingMachine\Infrastructure\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use VendingMachine\Coin\Coin;
+use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 
 final class CoinArrayType extends Type
 {
