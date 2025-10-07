@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace VendingMachine\VendingMachine\Application\Command\Purchase;
 
 use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
+use VendingMachine\VendingMachine\Domain\Service\PurchaseProcessor;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 
 final readonly class PurchaseProductHandler
 {
     public function __construct(
-        private VendingMachineRepositoryInterface $vendingMachineRepository
+        private VendingMachineRepositoryInterface $vendingMachineRepository,
+        private PurchaseProcessor $purchaseProcessor
     ) {
     }
 
@@ -18,7 +20,7 @@ final readonly class PurchaseProductHandler
     {
         $vendingMachine = $this->vendingMachineRepository->load();
         $product = new Product($command->productName);
-        $vendingMachine->selectProduct($product);
+        $vendingMachine->purchaseProduct($product, $this->purchaseProcessor);
         $this->vendingMachineRepository->save($vendingMachine);
 
         return new PurchaseProductResult($product, $vendingMachine->getLastChangeDispensed());

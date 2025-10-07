@@ -17,12 +17,16 @@ use VendingMachine\VendingMachine\Domain\Exception\InsufficientChangeException;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientFundsException;
 use VendingMachine\VendingMachine\Domain\Exception\ProductOutOfStockException;
 use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
+use VendingMachine\VendingMachine\Domain\Service\PurchaseProcessor;
+use VendingMachine\VendingMachine\Domain\Service\PurchaseResponse;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 
 #[CoversClass(PurchaseProductHandler::class)]
 #[UsesClass(PurchaseProductCommand::class)]
 #[UsesClass(PurchaseProductResult::class)]
+#[UsesClass(PurchaseProcessor::class)]
+#[UsesClass(PurchaseResponse::class)]
 #[UsesClass(Coin::class)]
 #[UsesClass(Product::class)]
 #[UsesClass(Money::class)]
@@ -38,7 +42,8 @@ final class PurchaseProductHandlerTest extends TestCase
     protected function setUp(): void
     {
         $this->repository = $this->createMock(VendingMachineRepositoryInterface::class);
-        $this->handler = new PurchaseProductHandler($this->repository);
+        $processor = new PurchaseProcessor();
+        $this->handler = new PurchaseProductHandler($this->repository, $processor);
     }
 
     public function testItShouldPurchaseProductWithExactChangeAndSaveVendingMachine(): void

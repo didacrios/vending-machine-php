@@ -6,11 +6,9 @@ namespace VendingMachine\VendingMachine\Domain\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use VendingMachine\Shared\Domain\Money;
+use VendingMachine\VendingMachine\Domain\Service\PurchaseProcessor;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
-use VendingMachine\VendingMachine\Domain\Exception\InsufficientChangeException;
-use VendingMachine\VendingMachine\Domain\Exception\InsufficientFundsException;
-use VendingMachine\VendingMachine\Domain\Exception\ProductOutOfStockException;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'vending_machine')]
@@ -59,34 +57,21 @@ final class VendingMachine
         );
     }
 
-    public function selectProduct(Product $product): Product
+    public function purchaseProduct(Product $product, PurchaseProcessor $processor): Product
     {
-        $insertedAmount = $this->getInsertedAmount();
+        $response = $processor->process(
+            $this->insertedCoins,
+            $this->availableProducts,
+            $this->availableChange,
+            $product
+        );
 
-        if ($insertedAmount->isLessThan($product->price())) {
-            throw new InsufficientFundsException($insertedAmount->toFloat(), $product->price()->toFloat());
-        }
-
-        if (!$this->hasProductAvailable($product)) {
-            throw new ProductOutOfStockException($product->name());
-        }
-
-        // Handle overpayment scenario
-        if ($insertedAmount->toFloat() > $product->price()->toFloat()) {
-            $changeAmount = $insertedAmount->toFloat() - $product->price()->toFloat();
-            $changeCoins = $this->calculateChange($changeAmount);
-            if ($changeCoins === null) {
-                throw new InsufficientChangeException($changeAmount);
-            }
-            $this->lastChangeDispensed = $changeCoins;
-        } else {
-            $this->lastChangeDispensed = [];
-        }
-
+        $this->lastChangeDispensed = $response->changeCoins();
         $this->removeProduct($product);
+        $this->updateAvailableChangeAfterPurchase($response->changeCoins());
         $this->clearInsertedCoins();
 
-        return $product;
+        return $response->product();
     }
 
     public function returnCoins(): array
@@ -147,40 +132,19 @@ final class VendingMachine
         $this->insertedCoins = [];
     }
 
+    private function updateAvailableChangeAfterPurchase(array $changeCoins): void
+    {
+        foreach ($changeCoins as $coinValue) {
+            if (isset($this->availableChange[$coinValue])) {
+                $this->availableChange[$coinValue]--;
+            }
+        }
+    }
+
     public function reset(): void
     {
         $this->insertedCoins = [];
         $this->initializeProducts();
         $this->initializeChange();
-    }
-
-    private function calculateChange(float $changeAmount): ?array
-    {
-        if ($changeAmount <= 0) {
-            return [];
-        }
-
-        $changeCoins = [];
-        $remainingCents = (int) round($changeAmount * 100);
-
-        $coinValues = array_keys($this->availableChange);
-        rsort($coinValues);
-
-        $tempAvailableChange = $this->availableChange;
-
-        foreach ($coinValues as $coinValue) {
-            while ($remainingCents >= $coinValue && $tempAvailableChange[$coinValue] > 0) {
-                $changeCoins[] = $coinValue;
-                $remainingCents -= $coinValue;
-                $tempAvailableChange[$coinValue]--;
-            }
-        }
-
-        if ($remainingCents === 0) {
-            $this->availableChange = $tempAvailableChange;
-            return $changeCoins;
-        }
-
-        return null;
     }
 }
