@@ -175,4 +175,36 @@ final class VendingMachineTest extends TestCase
         $this->assertEquals(10, $change[25]);
         $this->assertEquals(5, $change[100]);
     }
+
+    public function testShouldDecreaseAvailableChangeAfterPurchaseWithChange(): void
+    {
+        // Given
+        $machine = new VendingMachine();
+        $changeCalculator = new ChangeCalculator();
+        $processor = new PurchaseProcessor($changeCalculator);
+
+        // Get initial change inventory
+        $initialChange = $machine->getAvailableChange();
+        $this->assertEquals(10, $initialChange[25]); // Initially 10 x 0.25
+        $this->assertEquals(10, $initialChange[10]); // Initially 10 x 0.10
+
+        // Insert 1.00 to buy Water (0.65), expecting 0.35 change
+        $machine->insertCoin(Coin::fromFloat(1.00));
+        $product = new Product(Product::WATER);
+
+        // When
+        $machine->purchaseProduct($product, $processor);
+
+        // Then
+        // Change should be 0.25 + 0.10 = 0.35
+        $lastChange = $machine->getLastChangeDispensed();
+        $this->assertCount(2, $lastChange);
+        $this->assertContains(25, $lastChange); // One 0.25 coin
+        $this->assertContains(10, $lastChange); // One 0.10 coin
+
+        // Available change inventory should have decreased
+        $finalChange = $machine->getAvailableChange();
+        $this->assertEquals(9, $finalChange[25]); // Decreased by 1
+        $this->assertEquals(9, $finalChange[10]); // Decreased by 1
+    }
 }
