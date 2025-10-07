@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace VendingMachine\VendingMachine\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
-use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
+use VendingMachine\VendingMachine\Domain\Repository\VendingMachineRepositoryInterface;
 
 final class DoctrineVendingMachineRepository implements VendingMachineRepositoryInterface
 {

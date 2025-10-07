@@ -12,7 +12,7 @@ use VendingMachine\Tests\VendingMachine\Domain\Entity\VendingMachineObjectMother
 use VendingMachine\VendingMachine\Application\Customer\InsertCoin\InsertCoinCommand;
 use VendingMachine\VendingMachine\Application\Customer\InsertCoin\InsertCoinCommandHandler;
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
-use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
+use VendingMachine\VendingMachine\Domain\Repository\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 
 #[CoversClass(InsertCoinCommandHandler::class)]

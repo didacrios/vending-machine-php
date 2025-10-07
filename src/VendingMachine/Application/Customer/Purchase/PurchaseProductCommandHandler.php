@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace VendingMachine\VendingMachine\Application\Customer\Purchase;
 
-use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
+use VendingMachine\VendingMachine\Domain\Repository\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\Service\PurchaseProcessor;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 

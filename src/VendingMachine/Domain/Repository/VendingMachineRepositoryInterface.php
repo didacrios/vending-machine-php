@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\VendingMachine\Domain\Port;
+namespace VendingMachine\VendingMachine\Domain\Repository;
 
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
 

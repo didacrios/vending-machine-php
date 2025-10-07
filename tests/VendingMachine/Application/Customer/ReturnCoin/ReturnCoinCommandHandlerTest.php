@@ -13,7 +13,7 @@ use VendingMachine\VendingMachine\Application\Customer\ReturnCoin\ReturnCoinComm
 use VendingMachine\VendingMachine\Application\Customer\ReturnCoin\ReturnCoinCommandHandler;
 use VendingMachine\VendingMachine\Application\Customer\ReturnCoin\ReturnCoinResult;
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
-use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
+use VendingMachine\VendingMachine\Domain\Repository\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 
 #[CoversClass(ReturnCoinCommandHandler::class)]

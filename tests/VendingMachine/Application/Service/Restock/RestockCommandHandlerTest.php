@@ -12,7 +12,7 @@ use VendingMachine\Tests\VendingMachine\Domain\Entity\VendingMachineObjectMother
 use VendingMachine\VendingMachine\Application\Service\Restock\RestockCommand;
 use VendingMachine\VendingMachine\Application\Service\Restock\RestockCommandHandler;
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
-use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
+use VendingMachine\VendingMachine\Domain\Repository\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 

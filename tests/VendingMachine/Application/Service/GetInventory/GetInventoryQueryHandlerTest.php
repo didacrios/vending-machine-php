@@ -13,7 +13,7 @@ use VendingMachine\VendingMachine\Application\Service\GetInventory\GetInventoryQ
 use VendingMachine\VendingMachine\Application\Service\GetInventory\GetInventoryQueryHandler;
 use VendingMachine\VendingMachine\Application\Service\GetInventory\GetInventoryResult;
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
-use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
+use VendingMachine\VendingMachine\Domain\Repository\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 

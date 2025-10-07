@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace VendingMachine\VendingMachine\Application\Service\GetInventory;
 
-use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
+use VendingMachine\VendingMachine\Domain\Repository\VendingMachineRepositoryInterface;
 
 final readonly class GetInventoryQueryHandler
 {

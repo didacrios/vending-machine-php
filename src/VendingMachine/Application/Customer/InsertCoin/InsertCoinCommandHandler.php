@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace VendingMachine\VendingMachine\Application\Customer\InsertCoin;
 
-use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
+use VendingMachine\VendingMachine\Domain\Repository\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 
 final class InsertCoinCommandHandler
