@@ -10,7 +10,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
-use VendingMachine\VendingMachine\Application\Command\GetProductCommand;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
+use VendingMachine\VendingMachine\Application\Command\Purchase\PurchaseProductCommand;
+use VendingMachine\VendingMachine\Application\Command\Purchase\PurchaseProductResult;
+use VendingMachine\VendingMachine\Domain\Exception\InsufficientChangeException;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientFundsException;
 use VendingMachine\VendingMachine\Domain\Exception\ProductOutOfStockException;
 
@@ -18,7 +21,7 @@ use VendingMachine\VendingMachine\Domain\Exception\ProductOutOfStockException;
     name: 'vending-machine:get-product',
     description: 'Purchase a product from the vending machine'
 )]
-final class GetProductConsoleCommand extends Command
+final class PurchaseProductConsoleCommand extends Command
 {
     public function __construct(
         private readonly MessageBusInterface $commandBus
@@ -41,16 +44,27 @@ final class GetProductConsoleCommand extends Command
 
         try {
             // Dispatch command to handler
-            $command = new GetProductCommand($productName);
-            $this->commandBus->dispatch($command);
+            $command = new PurchaseProductCommand($productName);
+            $envelope = $this->commandBus->dispatch($command);
+
+            /** @var PurchaseProductResult $result */
+            $result = $envelope->last(HandledStamp::class)?->getResult();
 
             $output->writeln(sprintf(
                 '<info>Product dispensed: %s</info>',
                 $productName
             ));
 
+            if (!empty($result->changeCoins)) {
+                $changeAmounts = array_map(fn($cents) => sprintf('%.2f', $cents / 100), $result->changeCoins);
+                $output->writeln(sprintf(
+                    '<info>Change returned: %s</info>',
+                    implode(', ', $changeAmounts)
+                ));
+            }
+
             return Command::SUCCESS;
-        } catch (InsufficientFundsException|ProductOutOfStockException $e) {
+        } catch (InsufficientChangeException|InsufficientFundsException|ProductOutOfStockException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return Command::FAILURE;
         } catch (\InvalidArgumentException $e) {

@@ -13,7 +13,7 @@ framework:
             # Route your messages to the transports
             # Commands are handled synchronously
             'VendingMachine\VendingMachine\Application\Command\InsertCoinCommand': sync
-            'VendingMachine\VendingMachine\Application\Command\GetProductCommand': sync
+            'VendingMachine\VendingMachine\Application\Command\Purchase\PurchaseProductCommand': sync
 
 # when@test:
 #    framework:

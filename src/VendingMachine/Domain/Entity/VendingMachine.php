@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use VendingMachine\Shared\Domain\Money;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
+use VendingMachine\VendingMachine\Domain\Exception\InsufficientChangeException;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientFundsException;
 use VendingMachine\VendingMachine\Domain\Exception\ProductOutOfStockException;
 
@@ -29,6 +30,8 @@ final class VendingMachine
 
     #[ORM\Column(type: 'json')]
     private array $availableChange = [];
+
+    private array $lastChangeDispensed = [];
 
     public function __construct()
     {
@@ -68,7 +71,18 @@ final class VendingMachine
             throw new ProductOutOfStockException($product->name());
         }
 
-        // For now, just return the product (exact change scenario)
+        // Handle overpayment scenario
+        if ($insertedAmount->toFloat() > $product->price()->toFloat()) {
+            $changeAmount = $insertedAmount->toFloat() - $product->price()->toFloat();
+            $changeCoins = $this->calculateChange($changeAmount);
+            if ($changeCoins === null) {
+                throw new InsufficientChangeException($changeAmount);
+            }
+            $this->lastChangeDispensed = $changeCoins;
+        } else {
+            $this->lastChangeDispensed = [];
+        }
+
         $this->removeProduct($product);
         $this->clearInsertedCoins();
 
@@ -90,6 +104,11 @@ final class VendingMachine
     public function getAvailableChange(): array
     {
         return $this->availableChange;
+    }
+
+    public function getLastChangeDispensed(): array
+    {
+        return $this->lastChangeDispensed;
     }
 
     private function initializeProducts(): void
@@ -133,5 +152,35 @@ final class VendingMachine
         $this->insertedCoins = [];
         $this->initializeProducts();
         $this->initializeChange();
+    }
+
+    private function calculateChange(float $changeAmount): ?array
+    {
+        if ($changeAmount <= 0) {
+            return [];
+        }
+
+        $changeCoins = [];
+        $remainingCents = (int) round($changeAmount * 100);
+
+        $coinValues = array_keys($this->availableChange);
+        rsort($coinValues);
+
+        $tempAvailableChange = $this->availableChange;
+
+        foreach ($coinValues as $coinValue) {
+            while ($remainingCents >= $coinValue && $tempAvailableChange[$coinValue] > 0) {
+                $changeCoins[] = $coinValue;
+                $remainingCents -= $coinValue;
+                $tempAvailableChange[$coinValue]--;
+            }
+        }
+
+        if ($remainingCents === 0) {
+            $this->availableChange = $tempAvailableChange;
+            return $changeCoins;
+        }
+
+        return null;
     }
 }
