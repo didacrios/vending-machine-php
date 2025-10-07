@@ -135,4 +135,44 @@ final class VendingMachineTest extends TestCase
         $this->assertEquals(0.10, $returnedCoins[1]->value()->toFloat());
         $this->assertEquals(0.0, $machine->getInsertedAmount()->toFloat());
     }
+
+    public function testRestockProductsShouldUpdateProductQuantities(): void
+    {
+        // Given
+        $machine = new VendingMachine();
+
+        // When
+        $machine->restockProducts([
+            Product::WATER => 10,
+            Product::JUICE => 5,
+            Product::SODA => 3
+        ]);
+
+        // Then
+        $products = $machine->getAvailableProducts();
+        $this->assertEquals(10, $products[Product::WATER]);
+        $this->assertEquals(5, $products[Product::JUICE]);
+        $this->assertEquals(3, $products[Product::SODA]);
+    }
+
+    public function testRestockChangeShouldUpdateCoinQuantities(): void
+    {
+        // Given
+        $machine = new VendingMachine();
+
+        // When
+        $machine->restockChange([
+            5 => 20,
+            10 => 15,
+            25 => 10,
+            100 => 5
+        ]);
+
+        // Then
+        $change = $machine->getAvailableChange();
+        $this->assertEquals(20, $change[5]);
+        $this->assertEquals(15, $change[10]);
+        $this->assertEquals(10, $change[25]);
+        $this->assertEquals(5, $change[100]);
+    }
 }

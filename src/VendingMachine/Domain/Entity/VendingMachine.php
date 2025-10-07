@@ -96,6 +96,20 @@ final class VendingMachine
         return $this->lastChangeDispensed;
     }
 
+    public function restockProducts(array $products): void
+    {
+        foreach ($products as $productName => $quantity) {
+            $this->availableProducts[$productName] = $quantity;
+        }
+    }
+
+    public function restockChange(array $change): void
+    {
+        foreach ($change as $coinValue => $quantity) {
+            $this->availableChange[$coinValue] = $quantity;
+        }
+    }
+
     private function initializeProducts(): void
     {
         $this->availableProducts = [

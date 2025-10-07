@@ -31,3 +31,7 @@ services:
 
     VendingMachine\VendingMachine\Application\Customer\ReturnCoin\ReturnCoinCommandHandler:
         tags: ['messenger.message_handler']
+
+    # Command Handlers - Service
+    VendingMachine\VendingMachine\Application\Service\Restock\RestockCommandHandler:
+        tags: ['messenger.message_handler']
