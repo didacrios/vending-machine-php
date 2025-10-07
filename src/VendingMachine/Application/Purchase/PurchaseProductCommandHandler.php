@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\VendingMachine\Application\Command\Purchase;
+namespace VendingMachine\VendingMachine\Application\Purchase;
 
 use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\Service\PurchaseProcessor;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 
-final readonly class PurchaseProductHandler
+final readonly class PurchaseProductCommandHandler
 {
     public function __construct(
         private VendingMachineRepositoryInterface $vendingMachineRepository,

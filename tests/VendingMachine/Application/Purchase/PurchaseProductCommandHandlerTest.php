@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\tests\VendingMachine\Application\Command\Purchase;
+namespace VendingMachine\tests\VendingMachine\Application\Purchase;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use VendingMachine\Shared\Domain\Money;
 use VendingMachine\Tests\VendingMachine\Domain\Entity\VendingMachineObjectMother;
-use VendingMachine\VendingMachine\Application\Command\Purchase\PurchaseProductCommand;
-use VendingMachine\VendingMachine\Application\Command\Purchase\PurchaseProductHandler;
-use VendingMachine\VendingMachine\Application\Command\Purchase\PurchaseProductResult;
+use VendingMachine\VendingMachine\Application\Purchase\PurchaseProductCommand;
+use VendingMachine\VendingMachine\Application\Purchase\PurchaseProductCommandHandler;
+use VendingMachine\VendingMachine\Application\Purchase\PurchaseProductResult;
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientChangeException;
 use VendingMachine\VendingMachine\Domain\Exception\InsufficientFundsException;
@@ -23,7 +23,7 @@ use VendingMachine\VendingMachine\Domain\Service\PurchaseResponse;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 
-#[CoversClass(PurchaseProductHandler::class)]
+#[CoversClass(PurchaseProductCommandHandler::class)]
 #[UsesClass(PurchaseProductCommand::class)]
 #[UsesClass(PurchaseProductResult::class)]
 #[UsesClass(ChangeCalculator::class)]
@@ -36,17 +36,17 @@ use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 #[UsesClass(InsufficientFundsException::class)]
 #[UsesClass(ProductOutOfStockException::class)]
 #[UsesClass(InsufficientChangeException::class)]
-final class PurchaseProductHandlerTest extends TestCase
+final class PurchaseProductCommandHandlerTest extends TestCase
 {
     private VendingMachineRepositoryInterface $repository;
-    private PurchaseProductHandler $handler;
+    private PurchaseProductCommandHandler $handler;
 
     protected function setUp(): void
     {
         $this->repository = $this->createMock(VendingMachineRepositoryInterface::class);
         $changeCalculator = new ChangeCalculator();
         $processor = new PurchaseProcessor($changeCalculator);
-        $this->handler = new PurchaseProductHandler($this->repository, $processor);
+        $this->handler = new PurchaseProductCommandHandler($this->repository, $processor);
     }
 
     public function testItShouldPurchaseProductWithExactChangeAndSaveVendingMachine(): void

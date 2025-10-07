@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\VendingMachine\Application\Command\Purchase;
+namespace VendingMachine\VendingMachine\Application\Purchase;
 
 use VendingMachine\VendingMachine\Domain\ValueObject\Product;
 

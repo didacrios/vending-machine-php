@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\VendingMachine\Application\Command\ReturnCoin;
+namespace VendingMachine\VendingMachine\Application\ReturnCoin;
 
 use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
 
-final readonly class ReturnCoinHandler
+final readonly class ReturnCoinCommandHandler
 {
     public function __construct(
         private VendingMachineRepositoryInterface $vendingMachineRepository

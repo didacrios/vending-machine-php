@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\VendingMachine\Application\Command;
+namespace VendingMachine\VendingMachine\Application\InsertCoin;
 
-use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
-use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
 use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
+use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 
-final class InsertCoinHandler
+final class InsertCoinCommandHandler
 {
     public function __construct(
         private readonly VendingMachineRepositoryInterface $vendingMachineRepository

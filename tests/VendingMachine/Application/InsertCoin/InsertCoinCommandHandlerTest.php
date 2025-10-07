@@ -2,33 +2,33 @@
 
 declare(strict_types=1);
 
-namespace VendingMachine\Tests\VendingMachine\Application\Command;
+namespace VendingMachine\tests\VendingMachine\Application\InsertCoin;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use VendingMachine\Shared\Domain\Money;
 use VendingMachine\Tests\VendingMachine\Domain\Entity\VendingMachineObjectMother;
-use VendingMachine\VendingMachine\Application\Command\InsertCoinCommand;
-use VendingMachine\VendingMachine\Application\Command\InsertCoinHandler;
+use VendingMachine\VendingMachine\Application\InsertCoin\InsertCoinCommand;
+use VendingMachine\VendingMachine\Application\InsertCoin\InsertCoinCommandHandler;
 use VendingMachine\VendingMachine\Domain\Entity\VendingMachine;
 use VendingMachine\VendingMachine\Domain\Port\VendingMachineRepositoryInterface;
 use VendingMachine\VendingMachine\Domain\ValueObject\Coin;
 
-#[CoversClass(InsertCoinHandler::class)]
+#[CoversClass(InsertCoinCommandHandler::class)]
 #[UsesClass(InsertCoinCommand::class)]
 #[UsesClass(Coin::class)]
 #[UsesClass(Money::class)]
 #[UsesClass(VendingMachine::class)]
-final class InsertCoinHandlerTest extends TestCase
+final class InsertCoinCommandHandlerTest extends TestCase
 {
     private VendingMachineRepositoryInterface $repository;
-    private InsertCoinHandler $handler;
+    private InsertCoinCommandHandler $handler;
 
     protected function setUp(): void
     {
         $this->repository = $this->createMock(VendingMachineRepositoryInterface::class);
-        $this->handler = new InsertCoinHandler($this->repository);
+        $this->handler = new InsertCoinCommandHandler($this->repository);
     }
 
     public function testItShouldInsertValidCoinAndSaveVendingMachine(): void
