@@ -13,6 +13,61 @@ The vending machine requirements have been broken down into user stories for ite
 
 Each user story includes acceptance tests in Gherkin format to guide development.
 
+### Quick Demo - Testing User Stories
+
+Once you have the environment running (`make setup`), access the shell (`make shell`) and execute these commands to test each user story:
+
+#### USER_STORY_001: Insert money and purchase items
+```bash
+# First, restock the machine with products and change
+php bin/console vending-machine:restock --water=5 --juice=5 --soda=5 --coin-5=10 --coin-10=10 --coin-25=10 --coin-100=5
+
+# Insert coins (total $1.50)
+php bin/console vending-machine:insert-coin 1.00
+php bin/console vending-machine:insert-coin 0.25
+php bin/console vending-machine:insert-coin 0.25
+
+# Purchase WATER ($1.50)
+php bin/console vending-machine:purchase-product WATER
+```
+
+#### USER_STORY_002: Receive change when overpaying
+```bash
+# Insert coins (total $2.00)
+php bin/console vending-machine:insert-coin 1.00
+php bin/console vending-machine:insert-coin 1.00
+
+# Purchase JUICE ($1.75) - should receive $0.25 change
+php bin/console vending-machine:purchase-product JUICE
+```
+
+#### USER_STORY_003: Return inserted money
+```bash
+# Insert coins (total $1.00)
+php bin/console vending-machine:insert-coin 0.25
+php bin/console vending-machine:insert-coin 0.25
+php bin/console vending-machine:insert-coin 0.25
+php bin/console vending-machine:insert-coin 0.25
+
+# Return all coins
+php bin/console vending-machine:return-coin
+```
+
+#### USER_STORY_004: Restock items and change
+```bash
+# Restock the vending machine with products and change (service operation)
+php bin/console vending-machine:restock --water=10 --juice=10 --soda=10 --coin-5=20 --coin-10=20 --coin-25=20 --coin-100=10
+
+# You can also restock individual items
+php bin/console vending-machine:restock --water=5
+php bin/console vending-machine:restock --coin-25=10 --coin-100=5
+```
+
+**Note**: Each command includes `--help` for detailed usage:
+```bash
+php bin/console vending-machine:insert-coin --help
+```
+
 ## 🏗️ Technical Foundation
 
 This project is built on a custom PHP DDD skeleton, forked from [php-ddd-skeleton](https://github.com/didacrios/php-ddd-skeleton), which provides:
