@@ -9,6 +9,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use VendingMachine\VendingMachine\Application\Customer\InsertCoin\InsertCoinCommand;
 use VendingMachine\VendingMachine\Domain\Repository\VendingMachineRepositoryInterface;
@@ -53,8 +54,19 @@ final class InsertCoinConsoleCommand extends Command
             ));
 
             return Command::SUCCESS;
-        } catch (\InvalidArgumentException $e) {
-            $output->writeln(sprintf('<error>Invalid coin value: %.2f</error>', $value));
+        } catch (HandlerFailedException $e) {
+            // Symfony Messenger wraps handler exceptions in HandlerFailedException
+            // Extract the original exception to show a clean error message
+            foreach ($e->getWrappedExceptions() as $wrappedException) {
+                if ($wrappedException instanceof \InvalidArgumentException) {
+                    $output->writeln(sprintf('<error>%s</error>', $wrappedException->getMessage()));
+                    return Command::FAILURE;
+                }
+            }
+            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            return Command::FAILURE;
+        } catch (\Exception $e) {
+            $output->writeln(sprintf('<error>Unexpected error: %s</error>', $e->getMessage()));
             return Command::FAILURE;
         }
     }

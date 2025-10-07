@@ -8,6 +8,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use VendingMachine\VendingMachine\Application\Customer\ReturnCoin\ReturnCoinCommand;
@@ -45,8 +46,17 @@ final class ReturnCoinConsoleCommand extends Command
             }
 
             return Command::SUCCESS;
+        } catch (HandlerFailedException $e) {
+            // Symfony Messenger wraps handler exceptions in HandlerFailedException
+            // Extract the original exception to show a clean error message
+            foreach ($e->getWrappedExceptions() as $wrappedException) {
+                $output->writeln(sprintf('<error>%s</error>', $wrappedException->getMessage()));
+                return Command::FAILURE;
+            }
+            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            return Command::FAILURE;
         } catch (\Exception $e) {
-            $output->writeln(sprintf('<error>Error returning coins: %s</error>', $e->getMessage()));
+            $output->writeln(sprintf('<error>Unexpected error: %s</error>', $e->getMessage()));
             return Command::FAILURE;
         }
     }

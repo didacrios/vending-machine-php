@@ -9,6 +9,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use VendingMachine\VendingMachine\Application\Customer\Purchase\PurchaseProductCommand;
@@ -64,11 +65,21 @@ final class PurchaseProductConsoleCommand extends Command
             }
 
             return Command::SUCCESS;
-        } catch (InsufficientChangeException|InsufficientFundsException|ProductOutOfStockException $e) {
+        } catch (HandlerFailedException $e) {
+            foreach ($e->getWrappedExceptions() as $wrappedException) {
+                if ($wrappedException instanceof InsufficientFundsException ||
+                    $wrappedException instanceof InsufficientChangeException ||
+                    $wrappedException instanceof ProductOutOfStockException ||
+                    $wrappedException instanceof \InvalidArgumentException) {
+                    $output->writeln(sprintf('<error>%s</error>', $wrappedException->getMessage()));
+                    return Command::FAILURE;
+                }
+            }
+            // Fallback if no specific exception found
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return Command::FAILURE;
-        } catch (\InvalidArgumentException $e) {
-            $output->writeln(sprintf('<error>Invalid product: %s</error>', $productName));
+        } catch (\Exception $e) {
+            $output->writeln(sprintf('<error>Unexpected error: %s</error>', $e->getMessage()));
             return Command::FAILURE;
         }
     }
