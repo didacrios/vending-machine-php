@@ -35,3 +35,7 @@ services:
     # Command Handlers - Service
     VendingMachine\VendingMachine\Application\Service\Restock\RestockCommandHandler:
         tags: ['messenger.message_handler']
+
+    # Query Handlers - Service
+    VendingMachine\VendingMachine\Application\Service\GetInventory\GetInventoryQueryHandler:
+        tags: ['messenger.message_handler']

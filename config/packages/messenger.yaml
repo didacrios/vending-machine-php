@@ -11,9 +11,14 @@ framework:
 
         routing:
             # Route your messages to the transports
-            # Commands are handled synchronously
-            'VendingMachine\VendingMachine\Application\Command\InsertCoinCommand': sync
-            'VendingMachine\VendingMachine\Application\Command\Purchase\PurchaseProductCommand': sync
+            # Customer Commands - handled synchronously
+            'VendingMachine\VendingMachine\Application\Customer\InsertCoin\InsertCoinCommand': sync
+            'VendingMachine\VendingMachine\Application\Customer\Purchase\PurchaseProductCommand': sync
+            'VendingMachine\VendingMachine\Application\Customer\ReturnCoin\ReturnCoinCommand': sync
+            # Service Commands - handled synchronously
+            'VendingMachine\VendingMachine\Application\Service\Restock\RestockCommand': sync
+            # Service Queries - handled synchronously
+            'VendingMachine\VendingMachine\Application\Service\GetInventory\GetInventoryQuery': sync
 
 # when@test:
 #    framework:
